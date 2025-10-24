@@ -1,8 +1,40 @@
+# Virtual Environment
 .venv/
+venv/
+env/
+
+# Temporary frame files
+temp_frames/
+temp/
+
+# Python
 __pycache__/
 *.pyc
-temp_frames/
-.env
-.env.*
+*.pyo
+*.pyd
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# IDE
 .vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
 .DS_Store
+Thumbs.db
