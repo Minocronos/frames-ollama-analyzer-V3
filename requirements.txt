@@ -1,0 +1,7 @@
+gradio
+opencv-python
+numpy
+ollama
+requests
+tomlkit
+toml
