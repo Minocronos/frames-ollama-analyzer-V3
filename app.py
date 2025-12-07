@@ -985,17 +985,31 @@ IF YOU IGNORE THIS INSTRUCTION, THE OUTPUT WILL BE REJECTED.
                         'items': selected_items
                     }
                     
+                    # --- DEBUG: JSON DETECTION ---
+                    with st.expander("🔍 Debug JSON Detection", expanded=True):
+                        st.write(f"Mode: {analysis_mode}")
+                        st.write(f"JSON Found: {bool(parsed.get('json_data'))}")
+                        if not parsed.get('json_data'):
+                            st.warning("No JSON detected in response. Check if the model followed the template.")
+                            st.code(full_response[:500] + "...", language="markdown") # Show start of response
+                    # -----------------------------
+
                     # --- CHARACTER LOCKING SAVE BUTTON ---
                     if parsed.get('json_data'):
                         st.divider()
-                        col_lock, col_info = st.columns([1, 3])
-                        with col_lock:
-                            if st.button("💾 Save as Master Identity", key="btn_save_identity", type="primary", help="Lock this biometric data for future generations."):
-                                st.session_state['master_identity'] = parsed['json_data']
-                                st.toast("Identity Locked! Check the Sidebar.", icon="🔒")
-                                st.rerun()
-                        with col_info:
-                            st.info("👆 Click to lock this face/body for consistent character generation.")
+                        # Create a distinctive container for the Lock action
+                        with st.container():
+                            st.markdown("### 🧬 **Identity DNA Detected**")
+                            col_lock, col_info = st.columns([1, 2])
+                            with col_lock:
+                                # Distinctive label and help text
+                                if st.button("🧬 LOCK MASTER DNA", key="btn_save_identity", type="primary", help="CLICK TO LOCK this face/body as the Master Identity for all future generations."):
+                                    st.session_state['master_identity'] = parsed['json_data']
+                                    st.toast("🧬 DNA LOCKED! You can now generate consistent characters.", icon="🔒")
+                                    st.rerun()
+                            with col_info:
+                                st.caption("👆 **Click this to FREEZE this character's identity.**\nFuture prompts will force the AI to use these exact measurements.")
+                        st.divider()
                     # -------------------------------------
                     
                     # Display parsed prompts

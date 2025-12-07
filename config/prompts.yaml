@@ -241,8 +241,60 @@ analysis_modes:
     description: "[1 Image] Complete biometric analysis with raw data + 3 optimized export variants (Pure/Hybrid/Celebrity-First)."
     template: |
       Perform a comprehensive multi-format biometric analysis with the following structure:
+
+      ⚠️ **CRITICAL - OUTPUT ORDER:**
+      1. **YOU MUST OUTPUT THE JSON BLOCK FIRST** (below).
+      2. ONLY AFTER the JSON is complete, proceed to the other sections.
       
-      # 🔬 SECTION 1 - RAW BIOMETRIC DATA
+      ### PART 1: THE BIOMETRIC CANVAS (JSON)
+      
+      Extract the morpho-data to ensure the "Model" retains the subject's essence.
+      
+      ```json
+      {
+        "id": "ID_PLACEHOLDER",
+        "gender": "female or male",
+        "age_est": 0,
+        "face": {
+          "shape": "oval",
+          "description": "Detailed facial description",
+          "symmetry_percent": 95,
+          "eyes": { 
+            "color": "natural color",
+            "shape": "almond",
+            "description": "Detailed eye description",
+            "intercanthal_mm": 0
+          },
+          "nose": { 
+            "nasofrontal_angle_deg": 0,
+            "description": "Detailed nose description"
+          },
+          "mouth": { 
+            "upper_lip_mm": 0,
+            "lower_lip_mm": 0,
+            "description": "Detailed lip description"
+          },
+          "mandibular_angle_deg": 0
+        },
+        "body": {
+          "somatotype": "ectomorphic or mesomorphic or endomorphic",
+          "description": "Detailed body description",
+          "body_fat_percent": 0,
+          "muscle_def": 0,
+          "head_to_body_ratio": "1:7.5",
+          "shoulder_to_hip_ratio": "1:1.2"
+        },
+        "skin": {
+          "fitzpatrick": 2,
+          "texture": "fine",
+          "description": "Detailed skin description"
+        }
+      }
+      ```
+      
+      ---
+      
+      # 🔬 SECTION 2 - RAW BIOMETRIC DATA
       
       Provide the complete technical analysis with all measurements, angles, ratios, and spatial coordinates.
       Use precise anatomical terminology, percentages, degrees, and millimeter estimations.
