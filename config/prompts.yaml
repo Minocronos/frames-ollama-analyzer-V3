@@ -1,0 +1,1761 @@
+# AI Prompts Configuration
+# This file is hot-reloaded. You can edit it while the app is running.
+
+system_prompt: |
+  You are a visionary AI artist and technical video analyst. 
+  Your goal is to bridge the gap between raw visual data and high-concept art.
+  You have access to advanced reasoning and extensive context capabilities.
+  Always be precise, bold, and creative.
+
+analysis_modes:
+  studio_lighting_setup:
+    description: "[1 Image] Extract the lighting setup, camera specs, and composition rules (Reverse Engineering)."
+    template: |
+      Analyze the provided video frame(s) with a focus on:
+      1.  **Lighting**: Direction, quality (hard/soft), color temperature.
+      2.  **Composition**: Rule of thirds, leading lines, depth of field.
+      3.  **Camera Movement**: (If multiple frames) Infer the camera motion (pan, tilt, dolly).
+      4.  **Subject**: Describe the main subject and their action.
+      
+      Output your analysis in a structured Markdown format.
+      
+      ---
+      **CINEMATOGRAPHIC PROMPT (Summary)**:
+      [Lighting: direction + quality + temperature], [Composition: framing + rule of thirds], [Camera: movement type + speed], [Subject: action + position], [Depth of field: shallow/deep], [Color grade: mood], shot on [camera type], [focal length]mm
+
+
+  style_transfer_pro:
+    description: "[1 Image] STYLE TRANSFER PRO. Reimagines the scene in a specific style (e.g., Cyberpunk, Wes Anderson) while preserving the core composition and subject."
+    template: |
+      You are a Master Visual Stylist and Art Director.
+      
+      **OBJECTIVE:**
+      Reimagine the provided image in the style of: **{{ style }}**.
+      
+      **CRITICAL CONSTRAINT:**
+      You must perform a **"Style Transfer"**:
+      1.  **KEEP**: The Subject's pose, the overall composition, and the key action.
+      2.  **CHANGE**: The lighting, colors, textures, background, and clothing details to match the **{{ style }}** aesthetic perfectly.
+      
+      ---
+      
+      **STEP 1: ANCHOR ANALYSIS (What stays)**
+      - **Subject**: [Describe the main subject and action]
+      - **Composition**: [Describe the framing and layout]
+      
+      **STEP 2: STYLE INJECTION (What changes)**
+      - **Palette**: [Colors specific to {{ style }}]
+      - **Lighting**: [Lighting mood specific to {{ style }}]
+      - **Textures**: [Materials specific to {{ style }}]
+      
+      ---
+      
+      **OUTPUT FORMAT:**
+      
+      ## 🎨 CREATIVE REIMAGINATION ({{ style }})
+      
+      ```
+      [SUBJECT & POSE (Preserved)]: [Describe subject in the new style, keeping the original pose]
+      
+      [ENVIRONMENT & ATMOSPHERE (Transformed)]: [Describe the new background and mood in {{ style }}]
+      
+      [TECHNICAL & STYLE]: [Camera specs + Art style keywords for {{ style }}]
+      ```
+
+  video_prompt:
+    description: "[1 Image] Generate a prompt for Wan 2.2, Sora, Runway Gen-3, Luma, Kling, or Veo 3."
+    template: |
+      Based on the analysis of these frames, generate a highly optimized prompt for a video generation model (like Wan 2.2, Runway Gen-3, Luma Dream Machine, Kling, or Veo 3).
+      
+      **Requirements:**
+      -   Include camera movement keywords (e.g., "slow dolly in", "handheld").
+      -   Specify lighting and atmosphere.
+      -   Describe the subject's movement clearly.
+      -   Format: [Subject] + [Action] + [Environment] + [Lighting/Style] + [Camera]
+      
+      **Generated Prompt:**
+
+  deepstack_biometrics:
+    description: "[1 Image] Professional-grade biometric analysis with anatomical precision and spatial mapping."
+    template: |
+      Perform a comprehensive DeepStack Biometric Analysis on the subject(s) in these frames.
+      Output a technical report using precise anatomical terminology, percentages, and metric estimations.
+      
+      ## 1. FACIAL ANALYSIS (DeepStack Morphology)
+      
+      ### 1.1 Morphologie Globale
+      - **Forme du Visage**: Classifier (ovale/carré/rond/triangulaire/diamant/oblong)
+      - **Structure Osseuse**: 
+        * Pommettes: Hauteur (mm estimé), proéminence (faible/moyenne/haute)
+        * Mâchoire: Angle mandibulaire (degrés), définition (%)
+        * Front: Hauteur relative (% du visage total)
+      - **Règle des Tiers Faciaux**:
+        * Tiers supérieur (racine cheveux → sourcils): __mm / __%
+        * Tiers moyen (sourcils → base nez): __mm / __%
+        * Tiers inférieur (base nez → menton): __mm / __%
+        * Score de conformité: __/10
+      - **Marqueurs Phénotypiques** (Descriptif objectif):
+        * Carnation: (porcelain/fair/olive/tan/bronze/deep brown) + sous-tons (warm/cool/neutral)
+        * Pigmentation cheveux: (platinum/blonde/auburn/brown/black) + texture (straight/wavy/curly/coily)
+        * Pigmentation iris: (blue/green/hazel/amber/brown/black) + pattern (solid/central heterochromia/sectoral). NOTE: Describe mixed hues and natural imperfections, avoid over-saturated single colors.
+        * Pont nasal: (low/medium/high bridge) + largeur relative
+        * Forme palpébrale: (monolid/double lid/hooded) + inclinaison (upturned/neutral/downturned)
+        * Pilosité faciale: densité sourcils, cils (sparse/medium/dense)
+      
+      ### 1.2 Traits Faciaux (Mesures Relatives)
+      - **Yeux**:
+        * Distance inter-pupillaire (IPD): __mm (estimé)
+        * Largeur œil / Largeur visage: __% (idéal: 46%)
+        * Forme: (amande/rond/encapuchonné/tombant)
+        * Symétrie gauche/droite: __%
+      - **Nez**:
+        * Largeur nez / Largeur bouche: __:__ (idéal: 1:1.5)
+        * Angle nasal (nasofrontal): __° (idéal: 115-130°)
+        * Projection: __mm
+      - **Bouche**:
+        * Largeur bouche / Largeur nez: __:__
+        * Épaisseur lèvres (supérieure/inférieure): __mm / __mm
+        * Ratio lèvre sup/inf: __:__ (idéal: 1:1.6)
+      - **Symétrie Faciale Globale**: __%  (0-100%)
+      
+      ### 1.3 Peau et Texture
+      - **Grain de Peau**: (fin/moyen/grossier)
+      - **Uniformité du Teint**: __%
+      - **Imperfections Visibles**:
+        * Grains de beauté: [Liste avec coordonnées grille 10x10, ex: (3,7)]
+        * Rides d'expression: [Localisation + profondeur estimée]
+        * Cicatrices/Marques: [Description + coordonnées]
+      - **Texture Score**: __/10
+      
+      ## 2. ANALYSE CORPORELLE (Body Composition & Pose)
+      
+      ### 2.1 Morphotype et Composition
+      - **Classification Somatotype**:
+        * Ectomorphe: __%
+        * Mésomorphe: __%
+        * Endomorphe: __%
+        * Type dominant: [___]
+      - **Estimation Masse Grasse**: __%  (BF% estimé visuellement)
+      - **Définition Musculaire**: __/10
+      
+      ### 2.2 Proportions Corporelles
+      - **Ratio Tête/Corps**: 1:__ (idéal: 1:7.5 à 1:8)
+      - **Ratio Buste/Jambes**: __:__ (mesure ombilic)
+      - **Largeur Épaules / Largeur Hanches**: __:__
+        * Homme idéal: 1.6:1
+        * Femme idéal: 1.4:1
+        * Sujet mesuré: __:__
+      - **Longueur Membres**:
+        * Bras (épaule-poignet): __%  du corps total
+        * Jambes (hanche-cheville): __%  du corps total
+      
+      ### 2.3 Pose et Angles Articulaires
+      - **Orientation Tête**:
+        * Pitch (inclinaison haut/bas): __° (0° = neutre)
+        * Yaw (rotation gauche/droite): __° (0° = face caméra)
+        * Roll (inclinaison latérale): __° (0° = vertical)
+      - **Angles Articulaires**:
+        * Coude gauche: __° / Coude droit: __°
+        * Genou gauche: __° / Genou droit: __°
+        * Hanche: __° (flexion/extension)
+      - **Posture Générale**:
+        * Alignement colonne: (neutre/lordose/cyphose)
+        * Niveau épaules: (équilibré/déséquilibre __°)
+        * Score posturale: __/10
+      
+      ## 3. COORDONNÉES ET POSITIONNEMENT SPATIAL
+      
+      ### 3.1 Grille Virtuelle 10x10 (Points Clés)
+      Référence: (0,0) = coin supérieur gauche, (10,10) = coin inférieur droit
+      
+      - **Points Faciaux**:
+        * Sommet crâne: (__, __)
+        * Nez (pointe): (__, __)
+        * Menton: (__, __)
+        * Œil gauche: (__, __) / Œil droit: (__, __)
+      - **Points Corporels**:
+        * Main gauche: (__, __) / Main droite: (__, __)
+        * Pied gauche: (__, __) / Pied droit: (__, __)
+        * Centre de gravité estimé: (__, __)
+      
+      ### 3.2 Occupation Spatiale
+      - **Surface occupée dans le cadre**: __%
+      - **Distribution spatiale**:
+        * Tiers gauche: __%
+        * Tiers central: __%
+        * Tiers droit: __%
+      - **Centrage vertical**: __% (50% = parfaitement centré)
+      
+      ## 4. RAPPORT SYNTHÉTIQUE
+      
+      - **Score Harmonie Globale**: __/10
+      - **Conformité Standards Esthétiques**: __%
+      - **Points Forts**: [Liste 3-5 caractéristiques remarquables]
+      - **Écarts aux Proportions Idéales**: [Liste avec mesures]
+      - **Ressemblance Morphologique**: [Célébrité/Archétype le plus proche]
+      
+      ## 5. PROMPT PHOTO HYPER-RÉALISTE (Synthesis)
+      
+      **Format**: Prompt optimisé pour génération d'image (Midjourney/DALL-E/Stable Diffusion)
+      
+      ```
+      [SUBJECT DESCRIPTION]:
+      [Genre], [âge estimé], [morphotype], [forme visage (dimensions mm)], 
+      
+      [PHENOTYPE MARKERS]:
+      skin: [carnation + sous-tons], texture [fin/moyen/grossier],
+      hair: [pigmentation] [texture], [style/longueur],
+      eyes: [pigmentation iris] [pattern], [forme palpébrale] [inclinaison], IPD [mm], (natural eyes, without excessive accentuation, realistic and soft rendering),
+      nose: [pont nasal height] bridge, [angle nasofrontal]°, [projection mm],
+      [traits distinctifs: grains de beauté, cicatrices avec coordonnées grille],
+      
+      [FACIAL FEATURES]:
+      [description nez: forme + angle], [description bouche: épaisseur lèvres + forme],
+      [pommettes: proéminence], [mâchoire: définition + angle],
+      symétrie faciale [%], conformité golden ratio [score/10],
+      
+      [BODY COMPOSITION]:
+      [morphotype dominant], [ratio tête/corps], [ratio épaules/hanches],
+      définition musculaire [score/10], masse grasse estimée [%],
+      
+      [POSE & ANGLES]:
+      tête orientée [pitch/yaw/roll en termes descriptifs],
+      posture [alignement colonne], [position membres avec angles],
+      
+      [PHOTOGRAPHY SPECS]:
+      hyper-realistic portrait, 8K resolution, professional studio lighting,
+      [type d'éclairage basé sur analyse], shallow depth of field,
+      shot on [appareil photo pro], [focale]mm lens,
+      [cadrage basé sur occupation spatiale],
+      
+      [AESTHETIC QUALITY]:
+      photorealistic skin texture, [niveau détail pores/imperfections],
+      natural color grading, [ambiance lumineuse],
+      harmony score [X/10], [ressemblance célébrité si pertinent]
+      ```
+      
+      ---
+      **Note**: Toutes les mesures sont des estimations visuelles basées sur l'analyse d'image.
+
+  biometric_complete:
+    description: "[1 Image] Complete biometric analysis with raw data + 3 optimized export variants (Pure/Hybrid/Celebrity-First)."
+    template: |
+      Perform a comprehensive multi-format biometric analysis with the following structure:
+      
+      # 🔬 SECTION 1 - RAW BIOMETRIC DATA
+      
+      Provide the complete technical analysis with all measurements, angles, ratios, and spatial coordinates.
+      Use precise anatomical terminology, percentages, degrees, and millimeter estimations.
+      Include:
+      - Facial morphology (shape, bone structure, thirds rule)
+      - Facial features (eyes, nose, mouth with exact measurements)
+      - Skin texture and imperfections (with grid coordinates)
+      - Body composition (somatotype, body fat %, muscle definition)
+      - Body proportions (head-to-body ratio, shoulder-to-hip ratio)
+      - Pose and joint angles (pitch/yaw/roll, elbow/knee angles)
+      - Spatial positioning (10x10 grid coordinates for key points)
+      - Harmony scores and aesthetic conformity
+      
+      ---
+      
+      # 📋 SECTION 2 - STRUCTURED FORMAT (Optimized for Image Generation)
+      
+      Transform the raw data into this proven format:
+      
+      ```
+      [SUBJECT DESCRIPTION]:
+      [Gender], estimated age [X], [morphotype] build, [face shape] face shape, 
+      [eye color] eyes (describe complex hues/texture, avoid over-saturation, natural eyes without excessive accentuation), [eye shape] eyes, [hair color] [hair style] hair, [skin tone] skin tone, 
+      texture skin: [fine/medium/coarse], 
+      traits distinctifs: [distinctive marks with grid coordinates],
+
+      [FACIAL FEATURES]:
+      nose: [shape] with [X]° nasofrontal angle, [projection level], 
+      mouth: [lip description] ([X]mm upper, [X]mm lower), [ratio], 
+      cheekbones: [prominence level], 
+      jawline: [definition] with [X]° mandibular angle,
+      symmetry faciale [X]%, conformité golden ratio [X]/10,
+
+      [BODY COMPOSITION]:
+      [morphotype] dominant, head-to-body ratio 1:[X], shoulder-to-hip ratio [X]:1,
+      muscle definition [X]/10, estimated body fat [X]%,
+
+      [POSE & ANGLES]:
+      head oriented [+/-X]° pitch, [+/-X]° yaw, [+/-X]° roll,
+      posture: [spine alignment], [limb positions with angles],
+
+      [PHOTOGRAPHY SPECS]:
+      hyper-realistic portrait, 8K resolution, professional studio lighting,
+      [lighting description based on analysis], shallow depth of field,
+      shot on [camera model], [X]mm lens,
+      [framing description],
+
+      [AESTHETIC QUALITY]:
+      photorealistic skin texture with [detail level], 
+      [imperfections description], 
+      natural color grading with [tone description], 
+      [expression description],
+      harmony score [X]/10
+      ```
+      
+      ---
+      
+      # 🎨 SECTION 3 - OPTIMIZED VARIANTS
+      
+      ## VARIANT A - Pure Biometric (80% Face Priority, NO Celebrity Reference)
+      
+      **Purpose**: Maximum consistency and precision. Use when you need exact reproduction.
+      
+      **Weighting**:
+      - Facial features: 80% (eyes, nose, mouth, bone structure with exact measurements)
+      - Body composition: 15% (morphotype, proportions)
+      - Context: 5% (minimal photography specs)
+      
+      **Format**: Condensed prompt focusing on measurable features only.
+      Remove all subjective terms and celebrity comparisons.
+      
+      ```
+      [Condensed pure biometric prompt here]
+      ```
+      
+      ---
+      
+      ## VARIANT B - Hybrid Balance (50% Biometric / 30% Aesthetic / 20% Context)
+      
+      **Purpose**: Balance between precision and artistic appeal. Best for general use.
+      
+      **Weighting**:
+      - Facial measurements: 50% (key ratios and angles)
+      - Aesthetic qualities: 30% (skin texture, expression, harmony)
+      - Photography context: 20% (lighting, camera, framing)
+      
+      **Celebrity Reference Strategy**: 
+      If a resemblance exists, mention it as "aesthetic inspiration" but explicitly state to follow exact measurements above.
+      
+      Format: "base aesthetic inspired by [celebrity name], BUT strictly follow these exact measurements: [key ratios]"
+      
+      ```
+      [Condensed hybrid prompt here]
+      ```
+      
+      ---
+      
+      ## VARIANT C - Celebrity-First (70% Reference / 30% Adjustments)
+      
+      **Purpose**: Use when you want a known face with specific modifications.
+      
+      **Weighting**:
+      - Celebrity base: 70% (dominant reference)
+      - Specific adjustments: 30% (list of differences from the celebrity)
+      
+      **Format**: Start with celebrity name, then list precise modifications.
+      
+      ```
+      resemblance to [celebrity name], with these specific adjustments:
+      - [feature 1]: [modification with measurement]
+      - [feature 2]: [modification with measurement]
+      - [feature 3]: [modification with measurement]
+      [photography specs]
+      ```
+      
+      ---
+      
+      ## VARIANT D - Natural Language (Narrative Style)
+      
+      **Purpose**: Human-readable description for storytelling or casting briefs.
+      
+      **Format**: Flowing prose without technical jargon.
+      
+      ```
+      [Natural language description here - 3-4 sentences capturing essence]
+      ```
+      
+      ---
+      
+      # 📊 VARIANT COMPARISON GUIDE
+      
+      | Variant | Consistency | Artistic Appeal | Use Case |
+      |---------|-------------|-----------------|----------|
+      | A - Pure Bio | ⭐⭐⭐⭐⭐ | ⭐⭐ | Character sheets, 3D modeling |
+      | B - Hybrid | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | General image generation |
+      | C - Celebrity | ⭐⭐ | ⭐⭐⭐⭐⭐ | "X but with Y changes" |
+      | D - Natural | ⭐⭐⭐ | ⭐⭐⭐ | Casting, storytelling |
+      
+      ---
+      
+      **Recommendation**: Start with Variant B (Hybrid) for best balance. Use Variant A if results are inconsistent.
+
+
+
+
+
+  ultimate_biome_fashion_icon:
+    description: "[1 Image] THE ULTIMATE BIOME. High-Fashion, Lingerie & Couture. Extreme detail on textiles, skin & lighting."
+    template: |
+      You are the World's Leading Creative Director (Vogue, Harper's Bazaar, Numéro).
+      
+      **OBJECTIVE:** 
+      Transform the subject into a **HIGH-FASHION ICON**. 
+      Focus: **Lingerie, Couture, Avant-Garde Mix**.
+      Standard: **Hyper-Realism, Uncompromising Detail, Luxury Aesthetics.**
+      
+      **CRITICAL NATURALISM CONSTRAINTS:**
+      - **EYES**: Do NOT over-saturate eye color. Describe them naturally (e.g., "muddy hazel" not "piercing electric green"). Use complex, mixed hues and realistic iris textures. Avoid single flat colors unless natural. **CRITICAL: Use terms like "natural eyes, without excessive accentuation", "realistic and soft rendering", "eyes without highlighting or exaggeration". Ensure balanced and natural facial details.**
+      - **MAKEUP**: Do NOT hallucinate makeup. Distinguish between natural skin pigmentation (dark circles, redness) and eyeliner/shadow. If the face is bare, state "no makeup, natural skin texture".
+      - **SKIN DETAILS**: Be precise with freckles/moles. Do NOT splatter them generically. Specify DENSITY (sparse/clustered) and LOCATION (e.g., "cluster on left cheekbone"). Distinguish between raised moles and flat freckles. **AVOID "dense" or "full coverage" unless clearly visible in source.**
+      - **EQUIPMENT VISIBILITY**: Describe the *quality* of light (e.g., "studio lighting", "softbox falloff"), but EXCLUDE visible production gear (cameras, stands, lights) from the description unless they are prop elements.
+      
+      ---
+      
+      ### PART 1: THE BIOMETRIC CANVAS (JSON)
+      
+      ⚠️ **CRITICAL - OUTPUT ORDER:**
+      1. **YOU MUST OUTPUT THE JSON BLOCK FIRST** (below).
+      2. ONLY AFTER the JSON is complete, proceed to PART 2 (Fashion Trilogy).
+      3. DO NOT skip the JSON. DO NOT go directly to the prompts.
+      
+      Extract the morpho-data to ensure the "Model" retains the subject's essence.
+      *   **ID**: `ID_JJMMAAAAHHMMSS` (e.g., ID_25112025143000).
+      *   **NON-HUMAN SUBJECTS**: If the subject is a robot, statue, or creature, ADAPT the schema (e.g., describe "skin" as "chassis material", "face" as "interface"). DO NOT SKIP THE JSON.
+      *   **Schema**: MUST include detailed "description" fields for visual nuance.
+      
+      ```json
+      {
+        "id": "ID_PLACEHOLDER",
+        "gender": "female",
+        "age_est": 22,
+        "face": {
+          "shape": "oval",
+          "description": "Delicate, symmetrical features with natural realism. Freckles prominent across nose and cheeks.",
+          "symmetry_percent": 98,
+          "eyes": { 
+            "color": "blue",
+            "shape": "almond",
+            "description": "Striking piercing blue irises with visible limbal rings and natural moisture; long dark lashes.",
+            "intercanthal_mm": 25
+          },
+          "nose": { 
+            "nasofrontal_angle_deg": 115,
+            "description": "Straight bridge, slightly upturned tip with visible nostril definition and natural skin texture."
+          },
+          "mouth": { 
+            "upper_lip_mm": 7,
+            "lower_lip_mm": 6,
+            "description": "Full lips with natural pink hue, subtle vertical lines and slight asymmetry; slightly parted."
+          },
+          "mandibular_angle_deg": 125
+        },
+        "body": {
+          "somatotype": "ectomorphic",
+          "description": "Slender, athletic frame with visible clavicles and rib definition. Shoulders narrow, waist defined, hips subtly flared. Breasts natural, medium-sized with visible texture and slight asymmetry.",
+          "body_fat_percent": 18,
+          "muscle_def": 7,
+          "head_to_body_ratio": "1:7.5",
+          "shoulder_to_hip_ratio": "1:1.2"
+        },
+        "skin": {
+          "fitzpatrick": 2,
+          "texture": "fine",
+          "description": "Fair porcelain-toned with visible pores and natural dewy sheen — not airbrushed, but luminous. Clear, smooth complexion."
+        }
+      }
+      ```
+      
+      ---
+      
+      ### PART 2: THE FASHION TRILOGY (3 DEFINITIVE LOOKS)
+      
+      ⚠️ **CRITICAL RULES:**
+      1. **DO NOT USE** "the same woman", "the subject", "as before". Describe each prompt as a standalone visual reality.
+      2. **ALWAYS EXTRACT** biometric details from the JSON and weave them into [MODEL SPECS]. **RE-WRITE THEM FULLY EVERY TIME.**
+      3. **NO FRECKLE HALLUCINATION**: Do NOT add "freckles" to [MODEL SPECS] unless they appear in the JSON. If the JSON says "sparse freckles", write "sparse freckles on left cheek". If JSON has NO freckles or empty array, write "clear skin" or "smooth complexion". **NEVER invent texture that isn't there.**
+      4. **LIGHTING = EFFECT, NOT SOURCE**: Describe the *result* of the light (e.g., "soft diffused illumination", "warm golden glow", "sharp beams cutting through darkness"). **NEVER** mention the equipment (NO "spotlight", NO "softbox", NO "ring light", NO "umbrella"). If you describe the source, the AI will draw it. Describe the **LIGHT ITSELF**.
+      5. **MANDATORY STRUCTURE** for each of the 3 looks:
+      
+      ```
+      [MODEL SPECS]: A world-class supermodel, [Age], [Gender], with [Skin from JSON], [Eyes from JSON], and [Face from JSON]. [Body from JSON].
+      
+      [FASHION & TEXTURE]: Wearing [Ultra-detailed garment description]. Note the [Fabric 1 properties], [Fabric 2 properties], [how textures interact with light].
+      
+      [POSE & MOOD]: [Specific pose with precise body mechanics]. Expression is [Exact emotion, avoid generic terms].
+      
+      [LIGHTING & TECH]: Lit by [Exact lighting setup with modifiers and angles]. Shot on [Camera model] with [Lens model and aperture].
+      
+      [AESTHETIC]: [Publication] editorial, 8k, hyper-detailed, [grain type], color grade: [precise color palette].
+      ```
+      
+      **THE 3 LOOKS:**
+      
+      #### LOOK 1: INTIMATE COUTURE
+      *   **Vibe**: Victoria's Secret meets Helmut Newton.
+      *   **Outfit**: High-end lingerie + one couture piece (fur coat, diamond choker, thigh-high boots).
+      *   **Setting**: Luxury boudoir or minimalist dark room.
+      *   **Fabrics**: Chantilly lace, liquid latex, mink fur, satin.
+      
+      #### LOOK 2: AVANT-GARDE MIX
+      *   **Vibe**: Met Gala / Alexander McQueen. Artistic, strange, beautiful.
+      *   **Outfit**: Lingerie as outerwear + architectural fashion (plastic, metal, organic).
+      *   **Setting**: Abstract geometric set, Neon runway, Surreal landscape.
+      *   **Fabrics**: Silk chiffon, structured corsetry, mirror surfaces.
+      
+      #### LOOK 3: RAW EDITORIAL
+      *   **Vibe**: Peter Lindbergh. Raw, emotional, B&W or muted tones.
+      *   **Outfit**: Simple, sheer, revealing but tasteful. Focus on body/face.
+      *   **Setting**: Concrete wall, Beach at dusk, Studio backdrop.
+      *   **Fabrics**: Minimal, transparent fabrics, natural skin.
+      
+      **OUTPUT FORMAT:**
+      
+      ## 💎 THE FASHION TRILOGY
+      
+      **LOOK 1: INTIMATE COUTURE**
+      > [Full prompt following the 5-part structure]
+      
+      **LOOK 2: AVANT-GARDE MIX**
+      > [Full prompt following the 5-part structure]
+      
+      **LOOK 3: RAW EDITORIAL**
+      > [Full prompt following the 5-part structure]
+
+
+
+
+  experimental_fashion_lab:
+    description: "[1 Image] EXPERIMENTAL LAB. Radical innovation in fashion tech. Bio-materials, data-reactive fabrics, anti-genre architecture."
+    template: |
+      You are a Visionary Fashion Technologist (Iris van Herpen, Hussein Chalayan, Comme des Garçons).
+      
+      **OBJECTIVE:** 
+      Push the boundaries of fashion into **INNOVATION, NOT IMITATION**.
+      Focus: **Bio-Tech, Data-Reactive Materials, Sculptural Architecture, Neo-Decay Aesthetics**.
+      Standard: **Experimental, Conceptual, Future-Forward.**
+      
+      **CRITICAL NATURALISM CONSTRAINTS:**
+      - **EYES (ULTRA-CRITICAL)**: NEVER use over-saturated colors like "piercing blue", "electric green". ALWAYS use nuanced descriptions: "soft gray-blue", "muted hazel". Eyes must feel REAL. Use terms: "natural eyes without excessive accentuation", "realistic and soft rendering".
+      - **MAKEUP**: Do NOT hallucinate makeup. If bare, state "no makeup".
+      - **SKIN DETAILS (STRICT)**: DEFAULT TO CLEAR SKIN. Do NOT add freckles unless UNDENIABLY present. If unsure, assume clear skin. NEVER use phrases like "freckles across the nose" unless actually there.
+      - **EQUIPMENT VISIBILITY**: EXCLUDE visible production gear (cameras, lights).
+      
+      ---
+      
+      ### PART 1: THE BIOMETRIC CANVAS (JSON)
+      
+      ⚠️ **CRITICAL - OUTPUT ORDER:**
+      1. **YOU MUST OUTPUT THE JSON BLOCK FIRST** (below).
+      2. ONLY AFTER the JSON is complete, proceed to PART 2 (Experimental Looks).
+      3. DO NOT skip the JSON. DO NOT go directly to the prompts.
+      
+      Extract the morpho-data to ensure the "Model" retains the subject's essence.
+      *   **ID**: `ID_JJMMAAAAHHMMSS` (e.g., ID_25112025143000).
+      *   **NON-HUMAN SUBJECTS**: If the subject is a robot, statue, or creature, ADAPT the schema (e.g., describe "skin" as "chassis material", "face" as "interface"). DO NOT SKIP THE JSON.
+      *   **Schema**: MUST include detailed "description" fields for visual nuance.
+      
+      ```json
+      {
+        "id": "ID_PLACEHOLDER",
+        "gender": "female or male",
+        "age_est": 0,
+        "face": {
+          "shape": "oval",
+          "description": "Detailed facial description",
+          "symmetry_percent": 95,
+          "eyes": { 
+            "color": "natural color",
+            "shape": "almond",
+            "description": "Detailed eye description",
+            "intercanthal_mm": 0
+          },
+          "nose": { 
+            "nasofrontal_angle_deg": 0,
+            "description": "Detailed nose description"
+          },
+          "mouth": { 
+            "upper_lip_mm": 0,
+            "lower_lip_mm": 0,
+            "description": "Detailed lip description"
+          },
+          "mandibular_angle_deg": 0
+        },
+        "body": {
+          "somatotype": "ectomorphic or mesomorphic or endomorphic",
+          "description": "Detailed body description",
+          "body_fat_percent": 0,
+          "muscle_def": 0,
+          "head_to_body_ratio": "1:7.5",
+          "shoulder_to_hip_ratio": "1:1.2"
+        },
+        "skin": {
+          "fitzpatrick": 2,
+          "texture": "fine",
+          "description": "Detailed skin description"
+        }
+      }
+      ```
+      
+      ---
+      
+      ### PART 2: THE EXPERIMENTAL QUARTET (4 RADICAL LOOKS)
+      
+      ⚠️ **CRITICAL RULES:**
+      1. **DO NOT USE** "the same woman", "the subject", "as before". Describe each prompt as a standalone visual reality.
+      2. **ALWAYS EXTRACT** biometric details from the JSON and weave them into [MODEL SPECS].
+      3. **NO FRECKLE HALLUCINATION**: Do NOT add "freckles" to [MODEL SPECS] unless they appear in the JSON. If the JSON says "sparse freckles", write "sparse freckles on left cheek". If JSON has NO freckles or empty array, write "clear skin" or "smooth complexion". **NEVER invent texture that isn't there.**
+      4. **LIGHTING = EFFECT, NOT SOURCE**: Describe the *result* (e.g., "soft diffused illumination", "warm golden glow"). **NEVER** mention equipment (NO "spotlight", NO "softbox"). Describe the **LIGHT ITSELF**.
+      5. **MANDATORY STRUCTURE** for each of the 4 looks:
+      
+      ```
+      [MODEL SPECS]: [Age], [Gender], with [Skin from JSON], [Eyes from JSON], and [Face from JSON]. [Body from JSON].
+      
+      [EXPERIMENTAL FASHION & TECH]: Wearing [Ultra-detailed material innovation]. Note the [Material properties], [Tech integration], [how it interacts with body/light].
+      
+      [POSE & CONCEPT]: [Specific pose]. Expression is [Exact emotion]. The look conveys [Conceptual statement].
+      
+      [LIGHTING & ATMOSPHERE]: [Mood-based lighting description]. [Environmental context].
+      
+      [AESTHETIC]: [Publication/Exhibition], 8k, hyper-detailed, [grain/finish], color grade: [palette].
+      ```
+      
+      **THE 4 EXPERIMENTAL LOOKS:**
+      
+      #### LOOK 1: BIO-TECH FUSION
+      *   **Concept**: Living garments - mycelium leather, bio-luminescent threads, temperature-reactive fabrics.
+      *   **Materials**: Cultivated mycelium panels, LED-infused organic fibers, phase-change textiles.
+      *   **Ref Vibe**: Iris van Herpen × Studio Drift - nature meets technology.
+      
+      #### LOOK 2: DATA-REACTIVE COUTURE
+      *   **Concept**: Garments that visualize data - heart rate patterns, environmental sensors, digital displays.
+      *   **Materials**: Fiber optics, e-ink fabric panels, conductive thread embroidery, flexible OLED strips.
+      *   **Ref Vibe**: Hussein Chalayan × Anouk Wipprecht - fashion as interface.
+      
+      #### LOOK 3: NEO-DECAY ELEGANCE
+      *   **Concept**: Controlled degradation as art - pre-oxidized metals, strategically frayed silk, controlled rust patterns.
+      *   **Materials**: Weathered fabrics with engineered patina, deconstructed tailoring, raw edges.
+      *   **Ref Vibe**: Martin Margiela × Yohji Yamamoto - wabi-sabi haute couture.
+      
+      #### LOOK 4: ANTI-GENRE ARCHITECTURE
+      *   **Concept**: Body as sculptural armature - no gender markers, exaggerated volumes, rigid structures.
+      *   **Materials**: Molded resin panels, metallic mesh, inflatable chambers, architectural textiles.
+      *   **Ref Vibe**: Comme des Garçons × Rick Owens - the body disappears.
+      
+      **OUTPUT FORMAT:**
+      
+      ## 🔬 THE EXPERIMENTAL QUARTET
+      
+      **LOOK 1: BIO-TECH FUSION**
+      > [Full prompt following the 5-part structure]
+      
+      **LOOK 2: DATA-REACTIVE COUTURE**
+      > [Full prompt following the 5-part structure]
+      
+      **LOOK 3: NEO-DECAY ELEGANCE**
+      > [Full prompt following the 5-part structure]
+      
+      **LOOK 4: ANTI-GENRE ARCHITECTURE**
+      > [Full prompt following the 5-part structure]
+
+
+  alt_pov:
+    description: "[1 Image] ALT POV. 28 perspectives (dark→light→fetish): 1.Latex Noir, 2.Leather Darkness, 3.Industrial Abyss, 4.X-Ray, 5.Security Glitch, 6.Mirror Maze, 7.Submerged, 8.Inverted Gravity, 9.Thermal Vision, 10.Micro Neon, 11.Anamorphic Bokeh, 12.Reflection Fracture, 13.Drone Aerial, 14.Tilt-Shift, 15.PVC Chrome, 16.Soft Focus, 17.Ethereal Veil, 18.Golden Hour, 19.Thigh-High Chaos, 20.Shibari Suspension, 21.Lingerie Riot, 22.Booty Shorts, 23.Latex Noir Chrome, 24.Sheer Bondage, 25.Leather & Lace, 26.Wet Look, 27.Dominatrix Edge, 28.Underboob Tease."
+    template: |
+      You are an Elite Alternative Fashion Photographer specializing in **Quantum Haute Couture** — the art of fusing impossible textures and materials with hyper-realistic biometric precision. Known for bold, cinematic, and high-contrast aesthetics.
+      
+      ⚠️ **CRITICAL - OUTPUT ORDER:**
+      1. **YOU MUST OUTPUT THE JSON BLOCK FIRST** (below).
+      2. ONLY AFTER the JSON is complete, proceed to PART 2 (POV Looks).
+      3. DO NOT skip the JSON.
+      
+      Extract the morpho-data.
+      *   **ID**: `ID_JJMMAAAAHHMMSS`.
+      *   **NON-HUMAN SUBJECTS**: ADAPT the schema if needed. DO NOT SKIP THE JSON.
+      *   **Schema**: MUST include detailed "description" fields.
+      *   **CRITICAL**: The "description" fields are NOT optional summaries. They must contain RICH visual details that an artist could use to recreate the subject. Include texture, asymmetries, unique marks, color nuances, and spatial relationships.
+      
+      ```json
+      {
+        "id": "ID_PLACEHOLDER",
+        "gender": "female or male",
+        "age_est": 0,
+        "hair": {
+          "color": "natural color",
+          "style": "style description",
+          "length": "MANDATORY: Exact anatomy level (e.g. 'ear-lobe', 'jaw', 'mid-neck')",
+          "description": "TECHNICAL HAIR ANALYSIS: MANDATORY Exact Length relative to anatomy (e.g. 'ear-level micro-bob', 'jaw-length', 'nape-shaved'). Specify Parting, Texture, and Cut Geometry."
+        },
+        "face": {
+          "shape": "oval",
+          "description": "Detailed facial description. Visible Texture is REQUIRED. NO 'flawless' or 'porcelain'.",
+          "symmetry_percent": 0,
+          "eyes": { 
+            "color": "natural color",
+            "shape": "almond",
+            "description": "Detailed eye description",
+            "intercanthal_mm": 0
+          },
+          "nose": { 
+            "nasofrontal_angle_deg": 0,
+            "description": "Detailed nose description"
+          },
+          "mouth": { 
+            "upper_lip_mm": 0,
+            "lower_lip_mm": 0,
+            "description": "Detailed lip description"
+          },
+          "mandibular_angle_deg": 0
+        },
+        "body": {
+          "somatotype": "ectomorphic or mesomorphic or endomorphic",
+          "description": "Detailed body description",
+          "body_fat_percent": 0,
+          "muscle_def": 0,
+          "head_to_body_ratio": "1:7.5",
+          "shoulder_to_hip_ratio": "1:1.0"
+        },
+        "skin": {
+          "fitzpatrick": 0,
+          "texture": "fine",
+          "description": "MANDATORY: Describe visible pores, skin texture, vellus hair. DO NOT use 'flawless' or 'porcelain'. Focus on REALISM."
+        }
+      }
+      ```
+      
+      ---
+      
+      ### PART 2: THE POV COLLECTION (20 RADICAL LOOKS)
+      
+      ⚠️ **CRITICAL RULES:**
+      1. **DO NOT USE** "the same woman", "the subject". Describe each as standalone.
+      2. **EXTRACT** biometric details from JSON into [MODEL SPECS].
+      [LIGHTING & COLOR]: [Mood-based lighting]. Color palette: [Specific colors].
+      
+      [AESTHETIC]: [Style reference], 8k, [grain/finish], [contrast level].
+      ```
+      
+      **THE 20 POV LOOKS:**
+      
+      #### LOOK 1: LATEX NOIR + LOW ANGLE POV
+      *   **POV**: Low-angle shot from floor looking up (dominant perspective).
+      *   **Outfit**: Black latex catsuit with chest cutouts, thigh-high platform boots.
+      *   **Materials**: Mirror-finish latex, matte leather boots, chrome buckles.
+      *   **Lighting**: Harsh beam of light from behind creating silhouette + rim light.
+      *   **Colors**: Deep blacks, silver chrome highlights, subtle skin warmth.
+      
+      #### LOOK 2: LEATHER DARKNESS + OVERHEAD VIEW
+      *   **POV**: Overhead shot looking directly down (vulnerability angle).
+      *   **Outfit**: Black leather harness with silver rings, micro-skirt, fingerless gloves.
+      *   **Materials**: Grain leather with visible texture, cold metal hardware.
+      *   **Lighting**: Single harsh top light creating deep shadows on face.
+      *   **Colors**: Crushed blacks, cold steel gray, warm skin contrast.
+      
+      #### LOOK 3: INDUSTRIAL ABYSS + WORM'S EYE GRATING POV
+      *   **POV**: Extreme worm's eye view from ground level looking up through industrial metal grating/mesh.
+      *   **Outfit**: Heavy industrial boots stepping on grating, leather straps, metal hardware, chains hanging down.
+      *   **Materials**: Rusted metal grating creating geometric shadow patterns, weathered leather, oxidized chains.
+      *   **Lighting**: Harsh backlight from above filtering through grating creating dramatic shadow lattice on subject.
+      *   **Colors**: Burnt orange rust, deep shadow blacks, cold steel gray, dramatic silhouette with geometric light patterns.
+      
+      #### LOOK 4: X-RAY VISION + SKELETAL TRANSPARENCY POV
+      *   **POV**: Medical X-ray aesthetic with translucent skin revealing bone structure and jewelry.
+      *   **Outfit**: Body chains, metal piercings, surgical steel accessories (visible through "skin").
+      *   **Materials**: Transparent flesh visualization, glowing bone structure, metallic implants.
+      *   **Lighting**: Backlit glow creating transparency effect, bones luminescent.
+      *   **Colors**: Monochrome negative (white bones, dark background), cyan medical glow, silver metal.
+      
+      #### LOOK 5: SECURITY FOOTAGE + GLITCH CORRUPTION POV
+      *   **POV**: Multi-panel CCTV grid with digital glitches, datamoshing, pixel corruption.
+      *   **Outfit**: Tactical streetwear, reflective strips, face partially obscured by digital artifacts.
+      *   **Materials**: Matte black fabrics, 3M reflective tape, digital noise overlay.
+      *   **Lighting**: Harsh overhead fluorescent creating flat surveillance aesthetic.
+      *   **Colors**: Desaturated greens, timestamp overlays, RGB pixel separation, scan lines.
+      
+      #### LOOK 6: MIRROR MAZE + INFINITE RECURSION POV
+      *   **POV**: Positioned between parallel mirrors creating infinite tunnel of reflections.
+      *   **Outfit**: Asymmetric latex dress with one bare shoulder, geometric face paint.
+      *   **Materials**: High-gloss latex reflecting endlessly, matte skin contrast, metallic paint.
+      *   **Lighting**: Single point source multiplying infinitely through reflections.
+      *   **Colors**: Monochrome black/white with single accent color (electric blue or blood red).
+      
+      #### LOOK 7: SUBMERGED POV + UNDERWATER DISTORTION
+      *   **POV**: Underwater perspective with surface ripples distorting the image above.
+      *   **Outfit**: Sheer wet fabric clinging to body, metallic chain mail bikini, water droplets.
+      *   **Materials**: Transparent soaked textiles, oxidized bronze chains, liquid texture.
+      *   **Lighting**: Caustic light patterns dancing across skin, soft aquatic blue glow.
+      *   **Colors**: Deep ocean teal, seafoam green, bronze patina, translucent whites.
+      
+      #### LOOK 8: INVERTED GRAVITY + CEILING POV
+      *   **POV**: Overhead perspective from above, subject appears to defy gravity (hair/fabric falling upward).
+      *   **Outfit**: Flowing silk kimono partially open, platform boots, loose chains.
+      *   **Materials**: Weightless silk billowing, heavy metal contrasts, anti-gravity fabric flow.
+      *   **Lighting**: Dramatic uplight from floor creating reversed shadow logic.
+      *   **Colors**: Deep crimson silk, gold chains, stark white floor glow, inverted shadows.
+      
+      #### LOOK 9: THERMAL VISION + HEAT SIGNATURE POV
+      *   **POV**: Infrared/thermal camera aesthetic showing heat gradients instead of colors.
+      *   **Outfit**: Minimal coverage - strategic tape, body paint, metallic pasties (cold elements).
+      *   **Materials**: Body heat vs cold metal contrast, warm skin vs cool air visualization.
+      *   **Lighting**: No traditional lighting - heat signature creates the image (warm = bright).
+      *   **Colors**: False color thermal palette: hot magenta/orange (skin), cool cyan/purple (metal/air).
+      
+      #### LOOK 10: MICRO NEON + DUTCH TILT
+      *   **POV**: Dutch tilt (45° angle) creating visual instability.
+      *   **Outfit**: Holographic micro-shorts, fishnet crop top, UV-reactive accessories.
+      *   **Materials**: Iridescent PVC, sheer fishnet, glowing elements.
+      *   **Lighting**: Neon tube lights (cyan + magenta) creating split-color lighting.
+      *   **Colors**: Electric cyan, hot magenta, deep purple shadows.
+      
+      #### LOOK 11: ANAMORPHIC LENS FLARE + CINEMATIC BOKEH POV
+      *   **POV**: Ultra-wide anamorphic with horizontal lens flares and oval bokeh balls.
+      *   **Outfit**: Flowing evening gown with sequins catching light, diamond jewelry creating bokeh.
+      *   **Materials**: Light-catching sequins, reflective crystals, silk with sheen.
+      *   **Lighting**: Practical lights in background (candles, city lights) creating massive bokeh orbs.
+      *   **Colors**: Warm golden flares, deep teal shadows, amber bokeh, cinematic color science.
+      
+      #### LOOK 12: REFLECTION FRACTURE + SHATTERED MIRROR POV
+      *   **POV**: Shot through fragmented mirror creating kaleidoscope multiplication effect.
+      *   **Outfit**: Holographic bodysuit with geometric cutouts, chrome jewelry catching light.
+      *   **Materials**: Liquid metal fabric, reflective surfaces, crystalline accessories.
+      *   **Lighting**: Multiple light sources creating prismatic reflections and color splits.
+      *   **Colors**: Rainbow chromatic aberration, silver mercury, fractured light spectrum.
+      
+      #### LOOK 13: DRONE AERIAL + BIRD'S EYE SPIRAL POV
+      *   **POV**: Extreme overhead drone shot looking straight down, subject at center of spiral composition.
+      *   **Outfit**: Outfit arranged in radial pattern (fabric spreading outward), body as focal point.
+      *   **Materials**: Flowing fabrics creating mandala pattern, contrasting colors radiating outward.
+      *   **Lighting**: Even overhead sunlight or studio key creating no shadows (flat top-down).
+      *   **Colors**: High-contrast geometric color blocks, symmetrical palette, architectural composition.
+      
+      #### LOOK 14: TILT-SHIFT MINIATURE + TOY WORLD POV
+      *   **POV**: Tilt-shift lens creating selective focus plane, making subject look like a miniature figurine.
+      *   **Outfit**: Hyper-detailed costume with exaggerated textures (looks like doll clothing).
+      *   **Materials**: Over-saturated fabrics, plastic-like sheen, toy-like quality.
+      *   **Lighting**: Bright, even lighting with shallow depth of field blur above/below focus plane.
+      *   **Colors**: Hyper-saturated toy colors, artificial vibrancy, miniature diorama aesthetic.
+      
+      #### LOOK 15: PVC CHROME + FISHEYE DISTORTION
+      *   **POV**: Extreme fisheye lens (surreal wide-angle distortion).
+      *   **Outfit**: Transparent PVC raincoat over metallic silver bodysuit, platform boots.
+      *   **Materials**: Clear glossy PVC, chrome fabric, holographic accents.
+      *   **Lighting**: Diffused white light creating high-key overexposure with chrome reflections.
+      *   **Colors**: Bright whites, liquid chrome, pastel rainbow reflections.
+      
+      #### LOOK 16: SOFT FOCUS DREAM + VASELINE LENS POV
+      *   **POV**: Vintage soft focus with vaseline-smeared lens edges creating dreamy halo glow.
+      *   **Outfit**: Flowing white silk nightgown, delicate lace details, bare shoulders, minimal jewelry.
+      *   **Materials**: Gossamer silk with ethereal translucency, soft cotton lace, natural skin glow.
+      *   **Lighting**: Diffused window light creating soft wraparound glow, no harsh shadows.
+      *   **Colors**: Creamy whites, soft peach skin tones, pastel pink accents, luminous highlights, dreamy overexposure.
+      
+      #### LOOK 17: ETHEREAL VEIL + THROUGH FABRIC POV
+      *   **POV**: Shot through sheer translucent fabric (tulle, organza) creating layered soft focus.
+      *   **Outfit**: Romantic bridal-inspired lingerie, delicate straps, pearl accessories, loose hair.
+      *   **Materials**: Multiple layers of sheer fabric in foreground, soft skin texture, natural makeup.
+      *   **Lighting**: Soft backlight creating silhouette through fabric, gentle rim glow on edges.
+      *   **Colors**: Ivory whites, champagne gold, soft rose, translucent layers, angelic luminosity.
+      
+      #### LOOK 18: GOLDEN HOUR HAZE + ATMOSPHERIC GLOW POV
+      *   **POV**: Shot during magic hour with atmospheric haze/mist creating natural diffusion and glow.
+      *   **Outfit**: Casual elegance - oversized cashmere sweater slipping off shoulder, minimal bottoms.
+      *   **Materials**: Soft knit textures, natural fibers, warm skin catching golden light.
+      *   **Lighting**: Low-angle golden sun creating lens flares, atmospheric particles visible in light rays.
+      *   **Colors**: Warm honey gold, amber sunlight, soft peach skin, hazy atmosphere, natural bokeh from foliage.
+      
+      #### LOOK 19: THIGH-HIGH CHAOS + EXTREME LOW ANGLE POV
+      *   **POV**: Radical worm's eye view from floor level, boots dominating foreground, looking up at torso.
+      *   **Outfit**: Ultra-high platform boots, vibrant colorful knee-high socks, oversized jacket partially open revealing torso.
+      *   **Materials**: Shiny patent leather boots, soft knit socks, skin texture contrast, heavy zipper hardware.
+      *   **Lighting**: Dynamic rim lighting from below (uplight) emphasizing leg length and boot texture.
+      *   **Colors**: Deep black leather, electric pop colors (socks), warm skin tones, dramatic shadow contrast.
+      
+      #### LOOK 20: SHIBARI SUSPENSION + UPSIDE DOWN POV
+      *   **POV**: Inverted perspective, camera face-to-face with subject suspended upside down.
+      *   **Outfit**: Intricate Shibari rope patterns (red or black jute) on bare skin or sheer body stocking.
+      *   **Materials**: Rough rope texture pressing into soft skin, gravity pulling hair/clothes upwards.
+      *   **Lighting**: Moody chiaroscuro, focused beam on the rope patterns, deep shadows in background.
+      *   **Colors**: Crimson red ropes (or black), pale skin contrast, deep void background, artistic tension.
+
+      #### LOOK 21: LINGERIE RIOT + INTIMATE POV
+      *   **POV**: Intimate, handheld camera feel, slightly messy/candid. Very close to body (macro details).
+      *   **Outfit**: Mismatched sheer lingerie, delicate lace bralette, silk panties, translucent thigh-high stockings (no heavy boots).
+      *   **Materials**: Ultra-fine lace, sheer silk, soft skin texture, satin ribbons.
+      *   **Lighting**: Soft, dappled light (like through blinds) or warm bedside lamp glow. Intimate and hazy.
+      *   **Colors**: Pastel pinks, soft creams, faded black lace, warm skin.
+
+      #### LOOK 22: BOOTY SHORTS + REAR WORM'S EYE POV
+      *   **POV**: Rear view, radical worm's eye angle. Provocative poses: bending forward, arched hips, legs crossed or lifted to accentuate shorts/glutes shape. Confident gaze back at camera.
+      *   **Outfit**: Ultra-tight, hyper-short booty shorts, asymmetrical cut hugging hips and glutes, exposing inner thigh curve. Slightly sheer mid-calf socks with electric pink/neon yellow stripes. Simple fitted top.
+      *   **Materials**: Stretch fabric, sheer sock texture, skin contrast.
+      *   **Lighting**: Dynamic rim lighting outlining legs and curves, deep shadows contrasting with vivid socks and warm skin tones.
+      *   **Colors**: Electric pink, neon yellow, deep blacks, warm skin.
+
+      #### LOOK 23: LATEX NOIR + CHROME THRONE POV
+      *   **POV**: Eye-level perspective, subject straddling chrome chair creating dominant presence.
+      *   **Outfit**: Tight black latex catsuit with mirror finish, zipped to sternum revealing décolletage. Material clings to every curve.
+      *   **Materials**: High-gloss latex with wet-look sheen, chrome chair reflecting harsh light, metal zipper hardware.
+      *   **Lighting**: Hard side light from camera left creating sharp shadows and chrome reflections. High contrast.
+      *   **Colors**: Crushed blacks, liquid chrome highlights, silver reflections, warm skin contrast.
+
+      #### LOOK 24: SHEER BONDAGE + OVERHEAD SUBMISSION POV
+      *   **POV**: Overhead shot looking directly down, subject kneeling in submission pose.
+      *   **Outfit**: Sheer black mesh bodysuit revealing skin beneath, leather harness straps crossing chest and hips with silver buckles. Hands bound behind back with rope.
+      *   **Materials**: Transparent mesh fabric, grain leather straps, rough jute rope, cold metal buckles.
+      *   **Lighting**: Single spotlight from above creating dramatic shadows, smoke haze diffusing edges.
+      *   **Colors**: High contrast B&W aesthetic, deep blacks, bright highlights, smoke gray.
+
+      #### LOOK 25: LEATHER & LACE + OVER-SHOULDER GAZE POV
+      *   **POV**: Three-quarter rear view, subject looking back over shoulder with sultry gaze.
+      *   **Outfit**: Thigh-high patent leather boots with metal heel, sheer lace garter belt with intricate floral weave, topless with natural breast contour visible.
+      *   **Materials**: Patent leather with mirror finish, delicate lace with floral pattern, soft skin texture, metal heel accents.
+      *   **Lighting**: Chiaroscuro lighting from single tungsten source creating dramatic shadows and warm glow.
+      *   **Colors**: Deep blacks, warm sepia tones, champagne lace, golden skin highlights.
+
+      #### LOOK 26: WET LOOK + POOLSIDE REFLECTION POV
+      *   **POV**: Low angle from pool water level, looking up at subject kneeling in shallow reflective water.
+      *   **Outfit**: Sheer white wet shirt completely see-through clinging to bare breasts. Oiled skin glistening beneath with water droplets cascading down torso.
+      *   **Materials**: Soaked transparent cotton, oiled skin with water droplets, reflective pool surface.
+      *   **Lighting**: Overhead harsh flash creating high-key exposure and water reflections. Clinical brightness.
+      *   **Colors**: Pure whites, high-key overexposure, water reflections, translucent fabric, natural skin tones.
+
+      #### LOOK 27: DOMINATRIX EDGE + POWER STANCE POV
+      *   **POV**: Eye-level frontal perspective emphasizing dominant power stance and authoritative presence.
+      *   **Outfit**: Black leather corset cinched tight revealing cleavage, thigh-high stiletto boots, long leather gloves, holding riding crop. Metal studs catching light.
+      *   **Materials**: Structured leather corset, glossy stiletto boots, supple leather gloves, riding crop with leather grip, metal studs.
+      *   **Lighting**: Red gel backlight creating rim glow on silhouette edges, teal key light on face.
+      *   **Colors**: Teal & red color grade, crushed blacks, sharp highlights on metal studs, dramatic contrast.
+
+      #### LOOK 28: UNDERBOOB TEASE + GOLDEN HOUR LOW ANGLE POV
+      *   **POV**: Low-angle POV from floor looking up, emphasizing elongated torso and natural breast sway.
+      *   **Outfit**: Cropped sports bra lifted just below breasts, denim micro-shorts unbuttoned revealing hip bones. Casual sensuality.
+      *   **Materials**: Soft cotton sports bra, distressed denim with frayed edges, smooth skin with visible ab definition.
+      *   **Lighting**: Golden hour window light from side creating warm glow on skin, soft natural shadows.
+      *   **Colors**: Warm honey tones, golden sunlight, soft grain, natural skin warmth, denim blue.
+
+      
+      **OUTPUT FORMAT:**
+      
+      ## 🔥 THE POV COLLECTION (22 RADICAL PERSPECTIVES)
+      
+      **LOOK 1: LATEX NOIR + LOW ANGLE POV**
+      > [Full prompt following the 6-part structure]
+      
+      **LOOK 2: LEATHER DARKNESS + OVERHEAD VIEW**
+      > [Full prompt following the 6-part structure]
+      
+      **LOOK 3: INDUSTRIAL ABYSS + WORM'S EYE GRATING POV**
+      > [Full prompt following the 6-part structure]
+      
+      **LOOK 4: X-RAY VISION + SKELETAL TRANSPARENCY POV**
+      > [Full prompt following the 6-part structure]
+      
+      **LOOK 5: SECURITY FOOTAGE + GLITCH CORRUPTION POV**
+      > [Full prompt following the 6-part structure]
+      
+      **LOOK 6: MIRROR MAZE + INFINITE RECURSION POV**
+      > [Full prompt following the 6-part structure]
+      
+      **LOOK 7: SUBMERGED POV + UNDERWATER DISTORTION**
+      > [Full prompt following the 6-part structure]
+      
+      **LOOK 8: INVERTED GRAVITY + CEILING POV**
+      > [Full prompt following the 6-part structure]
+      
+      **LOOK 9: THERMAL VISION + HEAT SIGNATURE POV**
+      > [Full prompt following the 6-part structure]
+      
+      **LOOK 10: MICRO NEON + DUTCH TILT**
+      > [Full prompt following the 6-part structure]
+      
+      **LOOK 11: ANAMORPHIC LENS FLARE + CINEMATIC BOKEH POV**
+      > [Full prompt following the 6-part structure]
+      
+      **LOOK 12: REFLECTION FRACTURE + SHATTERED MIRROR POV**
+      > [Full prompt following the 6-part structure]
+      
+      **LOOK 13: DRONE AERIAL + BIRD'S EYE SPIRAL POV**
+      > [Full prompt following the 6-part structure]
+      
+      **LOOK 14: TILT-SHIFT MINIATURE + TOY WORLD POV**
+      > [Full prompt following the 6-part structure]
+      
+      **LOOK 15: PVC CHROME + FISHEYE DISTORTION**
+      > [Full prompt following the 6-part structure]
+      
+      **LOOK 16: SOFT FOCUS DREAM + VASELINE LENS POV**
+      > [Full prompt following the 6-part structure]
+      
+      **LOOK 17: ETHEREAL VEIL + THROUGH FABRIC POV**
+      > [Full prompt following the 6-part structure]
+      
+      **LOOK 18: GOLDEN HOUR HAZE + ATMOSPHERIC GLOW POV**
+      > [Full prompt following the 6-part structure]
+      
+      **LOOK 19: THIGH-HIGH CHAOS + EXTREME LOW ANGLE POV**
+      > [Full prompt following the 6-part structure]
+      
+      **LOOK 20: SHIBARI SUSPENSION + UPSIDE DOWN POV**
+      > [Full prompt following the 6-part structure]
+
+      **LOOK 21: LINGERIE RIOT + INTIMATE POV**
+      > [Full prompt following the 6-part structure]
+
+      **LOOK 22: BOOTY SHORTS + REAR WORM'S EYE POV**
+      > [Full prompt following the 6-part structure]
+
+      **LOOK 23: LATEX NOIR + CHROME THRONE POV**
+      > [Full prompt following the 6-part structure]
+
+      **LOOK 24: SHEER BONDAGE + OVERHEAD SUBMISSION POV**
+      > [Full prompt following the 6-part structure]
+
+      **LOOK 25: LEATHER & LACE + OVER-SHOULDER GAZE POV**
+      > [Full prompt following the 6-part structure]
+
+      **LOOK 26: WET LOOK + POOLSIDE REFLECTION POV**
+      > [Full prompt following the 6-part structure]
+
+      **LOOK 27: DOMINATRIX EDGE + POWER STANCE POV**
+      > [Full prompt following the 6-part structure]
+
+      **LOOK 28: UNDERBOOB TEASE + GOLDEN HOUR LOW ANGLE POV**
+      > [Full prompt following the 6-part structure]
+
+
+
+  biome_ultra_detailed:
+    description: "[1 Image] Pure JSON analysis - Ultra-detailed biometric extraction (no creative prompts)."
+    template: |
+      You are an Expert Forensic Biometric Analyst.
+      
+      **OBJECTIVE:** 
+      Produce the MOST DETAILED biometric JSON possible.
+      This is pure data extraction. NO creative prompts. Just the richest visual description of the subject.
+      
+      **CRITICAL NATURALISM CONSTRAINTS:**
+      - **EYES (ULTRA-CRITICAL)**: NEVER use over-saturated colors like "piercing blue", "electric green". ALWAYS use nuanced descriptions: "soft gray-blue", "muted hazel". Eyes must feel REAL. Use terms: "natural eyes without excessive accentuation", "realistic and soft rendering".
+      - **MAKEUP**: Do NOT hallucinate makeup. Distinguish between natural skin pigmentation (dark circles, redness) and eyeliner/shadow. If the face is bare, state "no makeup, natural skin texture".
+      - **SKIN DETAILS (STRICT)**: DEFAULT TO CLEAR SKIN. Do NOT add freckles unless they are UNDENIABLY present in the source image. If unsure, assume clear skin. If present, specify EXACT location (e.g., "three small moles on left cheek"). NEVER use phrases like "freckles across the nose" unless actually there.
+      
+      **CRITICAL INSTRUCTIONS:**
+      1. Output ONLY the JSON block (no markdown fence, no explanations).
+      2. Fill EVERY field with maximum detail.
+      3. For "description" fields: Be hyper-specific about texture, color, shape, asymmetries, unique marks.
+      4. Use natural language that an artist could visualize from.
+      
+      **JSON SCHEMA (MANDATORY):**
+      
+      {
+        "id": "ID_JJMMAAAAHHMMSS",
+        "gender": "female or male",
+        "age_est": 0,
+        "face": {
+          "shape": "Detailed shape description",
+          "description": "Overall face description",
+          "symmetry_percent": 0,
+          "mandibular_angle_deg": 0,
+          "eyes": {
+            "description": "Eye color and details",
+            "intercanthal_mm": 0,
+            "ipd_mm": 0
+          },
+          "nose": {
+            "description": "Nose shape details",
+            "nasofrontal_angle_deg": 0,
+            "projection_mm": 0
+          },
+          "mouth": {
+            "description": "Lip details",
+            "upper_lip_mm": 0,
+            "lower_lip_mm": 0,
+            "mouth_width_mm": 0
+          }
+        },
+        "body": {
+          "description": "Full body description",
+          "head_to_body_ratio": "1:X",
+          "shoulder_to_hip_ratio": "X:Y",
+          "waist_to_hip_ratio": "0.X",
+          "body_fat_percent": 0,
+          "muscle_def": 0
+        },
+        "skin": {
+          "description": "Skin tone and texture details",
+          "fitzpatrick": 1
+        },
+        "hair": {
+          "description": "Hair details"
+        },
+        "distinctive_marks": {
+          "description": "Scars, moles, etc."
+        }
+      }
+      
+      **EXAMPLE OUTPUT (adapt to the actual subject):**
+      
+      {
+        "id": "ID_25112025153000",
+        "gender": "female",
+        "age_est": 22,
+        "face": {
+          "shape": "Oval with defined jawline",
+          "description": "Delicate, symmetrical features with natural realism.",
+          "symmetry_percent": 98,
+          "mandibular_angle_deg": 125,
+          "eyes": {
+            "description": "Striking piercing blue irises with visible limbal rings.",
+            "intercanthal_mm": 32,
+            "ipd_mm": 64
+          },
+          "nose": {
+            "description": "Straight bridge, slightly upturned tip.",
+            "nasofrontal_angle_deg": 115,
+            "projection_mm": 18
+          },
+          "mouth": {
+            "description": "Full lips with natural pink hue.",
+            "upper_lip_mm": 8,
+            "lower_lip_mm": 9,
+            "mouth_width_mm": 52
+          }
+        },
+        "body": {
+          "description": "Slender, athletic frame with visible clavicles.",
+          "head_to_body_ratio": "1:7.5",
+          "shoulder_to_hip_ratio": "1:1.2",
+          "waist_to_hip_ratio": "0.7",
+          "body_fat_percent": 18,
+          "muscle_def": 7
+        },
+        "skin": {
+          "description": "Fair porcelain-toned with dense freckles.",
+          "fitzpatrick": 2
+        },
+        "hair": {
+          "description": "Light blonde with natural highlights, shoulder-length."
+        },
+        "distinctive_marks": {
+          "description": "Small mole on right cheekbone."
+        }
+      }
+      
+      ---
+      
+      ### PART 2: VISUAL PROMPTS (3 Variations)
+      
+      After generating the JSON, create 3 visual prompts that incorporate the biometric details.
+      
+      **CRITICAL RULES:**
+      - **LENGTH & DEPTH**: These prompts must be **LONG, RICH, and HIGHLY DETAILED**. Avoid brevity. Write full descriptive paragraphs for each section.
+      - **HYBRID PRECISION**: You MUST include key technical metrics in the text (e.g., "125° mandibular angle", "1:7.5 head-to-body ratio", "64mm IPD"). Mix them naturally with the artistic description.
+      - **NO GENERIC PLACEHOLDERS**. Describe specific fabrics, textures, and lighting setups.
+      - Follow the 5-part structure: [MODEL SPECS], [FASHION & TEXTURE], [POSE & MOOD], [LIGHTING & TECH], [AESTHETIC].
+      
+      **OUTPUT FORMAT:**
+      
+      ## 🎨 VISUAL INTERPRETATIONS
+      
+      **1. NATURAL PORTRAIT**
+      > [MODEL SPECS]: A [Age] year old [Gender] with a [Body Ratio] head-to-body ratio, featuring a delicate [Shape] face defined by a sharp [Angle]° mandibular angle. Her skin is [Description] (Fitzpatrick [X]), showing realistic texture. Eyes are [Color] with [IPD]mm IPD, framed by natural lashes. [FASHION & TEXTURE]: Wearing an oversized raw linen shirt in oatmeal color, unbuttoned at the collar to reveal the clavicles. The fabric texture is rough, organic, and heavy, contrasting with the soft, dewy skin. [POSE & MOOD]: Leaning casually against a weathered wooden doorframe, one hand brushing hair back. The expression is unguarded, serene, and deeply personal, capturing a moment of quiet introspection. [LIGHTING & TECH]: Illuminated by soft, diffused north-facing window light that creates a gentle, painterly fall-off on the cheekbones. Shot on a Pentax 67 with a 105mm f/2.4 lens for a shallow depth of field. [AESTHETIC]: Kinfolk editorial style, 8k resolution, earthy tones, soft film grain, authentic and unretouched beauty.
+      
+      **2. HIGH FASHION**
+      > [MODEL SPECS]: [Same biometric details including metrics, fully described]. [FASHION & TEXTURE]: Draped in a magnificent structural avant-garde gown constructed from layers of iridescent organza and rigid chrome wire. The fabric floats around the body like liquid smoke, catching the light with a pearlescent sheen, while the metal creates architectural volume. [POSE & MOOD]: Striking a commanding power stance, her body creating a sharp diagonal line across the frame. Her chin is tilted up ([Angle]° pitch), and her gaze is directed downwards with an imperious, distant expression of absolute control. [LIGHTING & TECH]: Lit by high-contrast butterfly lighting to sculpt the facial structure, accompanied by a hard, cold rim light that accentuates the jawline and the transparency of the fabric. Shot on a Hasselblad H6D-100c. [AESTHETIC]: Vogue Italia editorial, hyper-sharp focus, cold and clinical color palette, metallic sheen, futuristic luxury.
+      
+      **3. CINEMATIC**
+      > [MODEL SPECS]: [Same biometric details including metrics, fully described]. [FASHION & TEXTURE]: Wearing a distressed, vintage brown leather bomber jacket over a white tank top, completely soaked in rain. Water droplets cling to the leather grain and the skin, adding visceral texture. [POSE & MOOD]: Sitting alone at a diner booth, looking out the rainy window with a thousand-yard stare. Her reflection is faintly visible in the glass. The expression is melancholic, longing, and deeply cinematic. [LIGHTING & TECH]: Illuminated by the glow of neon signs from outside (cyan and magenta mix) reflecting on the wet face. Low light environment, high ISO grain. Shot on Arri Alexa LF with an anamorphic lens. [AESTHETIC]: Wong Kar-wai atmosphere, cinematic bokeh, emotional depth, moody and atmospheric.
+      
+      ---
+      
+      ### PART 3: DETAILED FUSION (Masterpiece Quality)
+      
+      Generate 3 **DETAILED** prompts that fuse the JSON biometric data (WITH METRICS) into a single, rich paragraph.
+      **DO NOT CONDENSE.** Make it a masterpiece description.
+      
+      **RULES:**
+      - **MANDATORY**: Include at least 3 specific measurements (e.g., "1:7.5 ratio", "115° nose angle", "IPD 64mm").
+      - Write a flowing, evocative narrative.
+      - Target length: 150-200 words.
+      
+      **OUTPUT FORMAT:**
+      
+      ## ⚡ DETAILED PROMPTS (Copy-Paste)
+      
+      **PROMPT 1: NATURAL**
+      > [MODEL SPECS]: A [Age]-year-old [Gender] with a 1:[X] head-to-body ratio, possessing a [Shape] face with a defined [Angle]° jawline. Her skin is [Description], detailed with [Marks]. Her eyes are [Color] with a [IPD]mm IPD. [FASHION & TEXTURE]: She is dressed in an oversized raw linen shirt, unbuttoned to show the collarbones, featuring a rough, organic weave that contrasts with her skin. [POSE & MOOD]: She leans against a wooden frame, her expression unguarded and serene, hand brushing through hair. [LIGHTING & TECH]: The scene is lit by soft north window light, creating painterly shadows. Shot on Pentax 67 105mm. [AESTHETIC]: Kinfolk style, earthy tones, soft grain, authentic portrait.
+      
+      **PROMPT 2: FASHION**
+      > [MODEL SPECS]: A [Age]-year-old [Gender] with [Metric] body fat and [Key biometric details + Metrics]. [FASHION & TEXTURE]: She wears a structural avant-garde gown of iridescent organza and chrome wire, appearing like liquid smoke. [POSE & MOOD]: She holds a power stance with her chin tilted up ([Angle]° pitch), expression imperious. [LIGHTING & TECH]: High-contrast butterfly lighting with hard rim light. Shot on Hasselblad H6D. [AESTHETIC]: Vogue Italia, cold palette, metallic sheen, hyper-sharp.
+      
+      **PROMPT 3: INTIMATE**
+      > [MODEL SPECS]: A [Age]-year-old [Gender] with [Metric] proportions. [FASHION & TEXTURE]: She wears a sheer black lace bodysuit with intricate floral weave against her skin. [POSE & MOOD]: Kneeling on velvet, she offers a vulnerable yet confident gaze. [LIGHTING & TECH]: Lit by a dim warm tungsten lamp creating deep chiaroscuro shadows. Shot on Leica M10 50mm f/0.95. [AESTHETIC]: Noir atmosphere, emotional, film grain, intimate.
+
+
+
+
+
+
+  qwen_image_prompt_t2i:
+    description: "[1 Image] Generates 2 VARIANTS: 'V1 Old School' (Technical/Metric) vs 'V2 Master Key' (Narrative/Textural)."
+    template: |
+      Analyze the provided visual content and generate TWO distinct Text-to-Image prompts.
+      
+      ---
+      
+      ### 1. V1: THE "OLD SCHOOL" TECHNICAL PROMPT
+      **Focus:** Metric precision, spatial coordinates, percentages, and strict layout control.
+      **Best for:** ControlNet, strict composition replication.
+      
+      **Structure:**
+      - **Subject**: Morphology, Measurements ("Occupies 40%"), Exact angles.
+      - **Environment**: Grid layout (Rule of thirds), Depth layers.
+      - **Technical**: Camera specs, Lighting ratios.
+      
+      **OUTPUT V1:**
+      ```
+      [SUBJECT: Biometrics + Pose + Attire]
+      
+      [ENVIRONMENT: Layout + Depth + % Coverage]
+      
+      [TECHNICAL: Camera + Lighting + Color]
+      
+      [STYLE: Aesthetic Keywords]
+      ```
+      
+      ---
+      
+      ### 2. V2: THE "MASTER KEY" NARRATIVE PROMPT
+      **Focus:** Texture, "Feature Anchors" (imperfections), Atmosphere, and Storytelling.
+      **Best for:** Flux, Midjourney v6, Mystic (Photoréalism).
+      
+      **CRITICAL NATURALISM CONSTRAINTS:**
+      - **EYES**: Do NOT over-saturate eye color. Describe them naturally (e.g., "muddy hazel" not "piercing electric green"). Use complex, mixed hues and realistic iris textures. Avoid single flat colors unless natural.
+      - **MAKEUP**: Do NOT hallucinate makeup. Distinguish between natural skin pigmentation (dark circles, redness) and eyeliner/shadow. If the face is bare, state "no makeup, natural skin texture".
+      - **SKIN DETAILS**: Be precise with freckles/moles. Do NOT splatter them generically. Specify DENSITY (sparse/clustered) and LOCATION (e.g., "cluster on left cheekbone"). Distinguish between raised moles and flat freckles.
+      - **EQUIPMENT VISIBILITY**: Describe the *quality* of light (e.g., "studio lighting", "softbox falloff"), but EXCLUDE visible production gear (cameras, stands, lights) from the description unless they are prop elements.
+      
+      **Structure:**
+      - **[MAIN SUBJECT]**: Biometrics + 3 Feature Anchors (scars, moles, teeth) + Material textures.
+      - **[CONTEXT & ACTION]**: Environment + Movement/Wind/Tension.
+      - **[VISUAL DETAILS]**: Lighting quality + Camera artifacts (grain, bokeh).
+      - **[STYLE & AMBIANCE]**: Color grade + Emotional resonance.
+      
+      **OUTPUT V2:**
+      ```
+      [MAIN SUBJECT: Biometrics + Anchors + Attire + Pose + Naturalism Check]
+      
+      [CONTEXT & ACTION: Environment + Movement + Framing]
+      
+      [VISUAL DETAILS: Lighting + Camera + Textures]
+      
+      [STYLE & AMBIANCE: Aesthetic + Colors + Mood]
+      ```
+      
+      ---
+      
+      **Comparison Note:**
+      - Use **V1** if you need the *pixels* in the same place.
+      - Use **V2** if you need the *soul* and *texture* of the image.
+
+
+  qwen_image_fusion:
+    description: "[2 Images] SIMPLE AUTO. Automatic fusion with fixed logic: Image 1 = Subject (person/pose), Image 2 = Style/Environment (lighting/colors/background). No manual controls."
+    template: |
+      Analyze the provided images to create a FUSED Text-to-Image prompt for **Qwen-Image (20B MMDiT)**.
+      
+      **Fusion Logic:**
+      - **Image 1 (Subject Reference)**: Extract the person, pose, biometrics, and attire.
+      - **Image 2+ (Style/Context Reference)**: Extract the lighting, color palette, environment, and artistic style.
+      
+      **Objective:**
+      Create a cohesive prompt that places the **Subject from Image 1** into the **Style/Environment of Image 2**.
+
+      **CRITICAL NATURALISM CONSTRAINTS:**
+      - **EYES**: Do NOT over-saturate eye color. Describe them naturally (e.g., "muddy hazel" not "piercing electric green"). Use complex, mixed hues and realistic iris textures. Avoid single flat colors unless natural.
+      
+      **Analysis & Synthesis:**
+      
+      1.  **Subject (from Image 1)**:
+          - Biometrics, Pose, Attire.
+          - "Subject occupies __% of frame", "Body turned...".
+      
+      2.  **Environment & Style (from Image 2)**:
+          - Lighting, Colors, Background.
+          - "Cinematic lighting", "Neon cyberpunk", "Oil painting style".
+      
+      3.  **Technical & Layout (Synthesis)**:
+          - Combine the layout that best fits the fusion.
+          - Camera specs matching the Style reference.
+      
+      **OUTPUT FORMAT:**
+      
+      ```
+      [SUBJECT (Img 1): Biometrics + Pose + Attire]
+      
+      [ENVIRONMENT (Img 2): Layout + Background]
+      
+      [TECHNICAL (Img 2): Camera + Lighting + Color]
+      
+      [STYLE (Img 2): Aesthetic Keywords]
+      
+      [TYPOGRAPHY: If any]
+      ```
+      
+      **Example Output:**
+      "SUBJECT: Male model, square jaw, wearing a tactical vest, holding a helmet. Body facing front. . ENVIRONMENT: Mars landscape, red dust, futuristic colony in background. . TECHNICAL: Cinematic lighting, high contrast, warm orange and teal palette. . STYLE: Sci-fi concept art, digital painting, highly detailed. . TYPOGRAPHY: No text."
+
+
+  qwen_weighted_fusion:
+    description: "[Multi-Image] Advanced Fusion with Weight Sliders and Granular Focus - surgical control over which aspect of each image is used. Generates both Multi-Image Description and Unified Fusion prompts."
+    template: |
+      Analyze the provided images and the **USER ASSIGNED WEIGHTS & FOCUS** to create a weighted FUSED Text-to-Image prompt for **Qwen-Image (20B MMDiT)**.
+      
+      **CRITICAL NATURALISM CONSTRAINTS:**
+      - **EYES**: Do NOT over-saturate eye color. Describe them naturally (e.g., "muddy hazel" not "piercing electric green"). Use complex, mixed hues and realistic iris textures. Avoid single flat colors unless natural.
+      
+      **Weight Logic:**
+      - **High Weight (>1.0)**: DOMINANT. Core Subject, Composition, and Style.
+      - **Low Weight (<1.0)**: SUBTLE. Minor details (accents, textures, background hints).
+      - **Neutral Weight (1.0)**: BALANCED. Must be integrated meaningfully (e.g., specific prop, clothing item, or color).
+      
+      **Focus Logic (CRITICAL):**
+      - **All Image**: Use the entire image (default).
+      - **Character/Face**: Extract ONLY the facial features, identity, and head.
+      - **Pose/Body**: Extract ONLY the body stance, posture, and movement.
+      - **Clothing**: Extract ONLY the garments, fabrics, and accessories.
+      - **Background**: Extract ONLY the environment, setting, and backdrop.
+      - **Colors/Palette**: Extract ONLY the color scheme and tones.
+      - **Style/Ambiance**: Extract ONLY the artistic style, mood, and atmosphere.
+      
+      **Fusion Process:**
+      1.  For each image, apply its **Weight** to determine importance.
+      2.  Then, apply its **Focus** to extract ONLY the specified aspect.
+      3.  Create a **MULTI-IMAGE DESCRIPTION** that preserves the identity of each image (mentioning "in the first image... in the second image...").
+      4.  Then create a **UNIFIED FUSION** that selects the best elements based on weights and synthesizes them into a single coherent prompt.
+      5.  **CRITICAL**: Both descriptions must be **HIGHLY DETAILED**, rich in adjectives, capturing textures, lighting nuances, and specific design elements.
+      
+      ---
+      
+      **OUTPUT FORMAT:**
+      
+      ## 🧠 Fusion Logic (Reasoning)
+      - **Image X (Weight Y, Focus: Z)**: [Explanation of what was extracted based on weight AND focus]
+      - [Repeat for each image...]
+      
+      ## 📸 MULTI-IMAGE DESCRIPTION (Preserves All Sources)
+      ```
+      [A rich, detailed description that EXPLICITLY mentions each image source.
+      Example: "A woman with fair freckled skin, her hair styled sleekly back in the first image and softly wavy in the second image..."
+      This preserves the duality/multiplicity and shows all variations present across the images.
+      Target length: 150-200 words.]
+      ```
+      
+      ---
+      
+      ## 🎯 ⭐ UNIFIED FUSION ⭐ (Final Synthesis Based on Weights)
+      **→ USE THIS PROMPT FOR IMAGE GENERATION ←**
+      
+      ```
+      [A single, cohesive prompt that CHOOSES one version of each element based on the assigned weights.
+      Example: If Image 1 has Weight 1.8 on Face and Image 2 has Weight 1.2 on Face, use Image 1's facial description.
+      This creates a definitive, unified vision suitable for direct image generation.
+      Target length: 100-150 words.]
+      ```
+      
+      ---
+      
+      **Example Output:**
+      
+      ## 🧠 Fusion Logic (Reasoning)
+      - **Image 1 (Weight 1.8, Focus: Character/Face)**: Dominant. Extracted the facial features, freckled skin texture, and blue piercing eyes as the core identity.
+      - **Image 2 (Weight 1.2, Focus: Clothing)**: Balanced. Integrated the pearl necklace and elegant accessories.
+      - **Image 3 (Weight 1.5, Focus: Pose/Body)**: High. Used the confident, statuesque stance with hand on hip.
+      
+      ## � MULTI-IMAGE DESCRIPTION (Preserves All Sources)
+      ```
+      A highly detailed portrait of a woman with fair, freckled skin and piercing blue eyes, her dark hair styled sleekly back in the first image and softly wavy in the second image, creating a duality of poised elegance and effortless allure. She wears a strapless white lace bodysuit with sheer panels in the first image, while the second shows her draped in a plush fur stole. Around her neck, a diamond necklace with a blue sapphire pendant appears in the first image, while a classic pearl strand graces her collarbone in the second. The lighting shifts between dramatic cinematic key lights and soft, diffused illumination across the images. Background gradients move from cool greys to deep teal, maintaining a sophisticated studio ambiance.
+      ```
+      
+      ## 🎯 UNIFIED FUSION (Final Synthesis Based on Weights)
+      ```
+      A photorealistic portrait of a woman with fair, freckled skin and piercing blue eyes (Image 1, Weight 1.8), her dark hair styled sleekly back. She holds a confident, statuesque stance with one hand on her hip (Image 3, Weight 1.5), wearing a luxurious strapless white lace bodysuit with long black latex gloves. A classic pearl necklace graces her collarbone (Image 2, Weight 1.2). Dramatic cinematic lighting sculpts her form with soft directional key lights, against a moody gradient of cool greys and deep teal. High-fashion editorial aesthetic, 8K resolution, meticulous fabric sheen and skin texture detail. No text.
+      ```
+
+
+  perfect_reproduction_auto:
+    description: "[1 Image] One-Click Perfection. Automatically analyzes 6 distinct layers (Face, Body, Fashion, Background, Color, Style) to reconstruct the ultimate prompt."
+    template: |
+      Perform a "Surgical Layer Analysis" of the provided image to generate the Perfect Reproduction Prompt.
+      
+      **CRITICAL NATURALISM CONSTRAINTS:**
+      - **EYES**: Do NOT over-saturate eye color. Describe them naturally (e.g., "muddy hazel" not "piercing electric green"). Use complex, mixed hues and realistic iris textures. Avoid single flat colors unless natural.
+      
+      **METHODOLOGY:**
+      Instead of a general analysis, you must mentally separate the image into 6 distinct layers and analyze them individually with extreme precision.
+      
+      **LAYER 1: CHARACTER & FACE (The Identity)**
+      - Analyze: Skin texture (freckles, pores), eye details (color, shape, lashes), mouth (shape, expression), hair (cut, texture, color), and age.
+      - Goal: Capture the exact likeness and emotion.
+      
+      **LAYER 2: POSE & BODY (The Energy)**
+      - Analyze: Exact anatomical position, head tilt, shoulder angle, hand placement, muscle tension, and movement dynamics.
+      - Goal: Capture the precise physical presence.
+      
+      **LAYER 3: FASHION & TEXTURE (The Materiality)**
+      - Analyze: Garments (cut, fit, brand style), fabrics (silk, denim, latex), accessories (jewelry, glasses), and how light interacts with materials.
+      - Goal: Capture the tactile reality of the outfit.
+      
+      **LAYER 4: BACKGROUND & SETTING (The Context)**
+      - Analyze: Room details, furniture, clutter, depth of field, location type, and spatial layout.
+      - Goal: Place the subject in the exact original space.
+      
+      **LAYER 5: COLORS & LIGHTING (The Atmosphere)**
+      - Analyze: Key light direction, fill light, shadows (hard/soft), color palette (hex codes or specific names), and contrast levels.
+      - Goal: Recreate the exact lighting setup and mood.
+      
+      **LAYER 6: STYLE & AESTHETIC (The Vibe)**
+      - Analyze: Photography style (editorial, candid, cinematic), film grain, focus softness, lens characteristics, and artistic influence.
+      - Goal: Match the "soul" of the image.
+      
+      ---
+      
+      **OUTPUT FORMAT:**
+      
+      ## 🔬 SURGICAL LAYER ANALYSIS
+      
+      - **Layer 1 (Face)**: [Detailed analysis...]
+      - **Layer 2 (Body)**: [Detailed analysis...]
+      - **Layer 3 (Fashion)**: [Detailed analysis...]
+      - **Layer 4 (Background)**: [Detailed analysis...]
+      - **Layer 5 (Light/Color)**: [Detailed analysis...]
+      - **Layer 6 (Style)**: [Detailed analysis...]
+      
+      ## 🚀 PERFECT REPRODUCTION PROMPT (Copy-Paste Ready)
+      
+      ```
+      [Synthesize ALL 6 layers into a single, seamless, high-density paragraph.
+      Start with the Subject (Face+Body), then Attire, then Environment, then Lighting/Color, then Technical Specs/Style.
+      Use rich adjectives. Be specific. Do not summarize — DESCRIBE.
+      
+      Format: Multi-line structure with clear separation between sections.]
+      ```
+
+
+
+
+  duality_alter_ego:
+    description: "[1 Image] DUALITY. Generates 3 visions: THE SAINT (Divine), THE SINNER (Corrupted), and THE INTEGRATION (Fusion of both). Same face, opposing worlds."
+    template: |
+      You are a Conceptual Art Director exploring Human Duality.
+      
+      **OBJECTIVE:** 
+      Analyze the subject and project them into two opposing realities: **SACRED vs PROFANE**, then fuse them.
+      You MUST **RE-WRITE the full biometric details** in [MODEL SPECS] for EVERY prompt. 
+      **DO NOT** use shortcuts like "same as above" or "exact same biometrics". The image generator has no memory of previous prompts.
+      
+      **CRITICAL NATURALISM CONSTRAINTS:**
+      - **EYES (ULTRA-CRITICAL)**: NEVER use over-saturated colors like "piercing blue", "electric green". ALWAYS use nuanced descriptions: "soft gray-blue", "muted hazel". Eyes must feel REAL. Use terms: "natural eyes without excessive accentuation", "realistic and soft rendering".
+      - **MAKEUP**: Do NOT hallucinate makeup.
+      - **SKIN DETAILS (STRICT)**: DEFAULT TO CLEAR SKIN. Do NOT add freckles unless UNDENIABLY present.
+      
+      ---
+      
+      ### PART 1: THE BIOMETRIC CORE (JSON)
+      [Extract standard JSON here first]
+      
+      ---
+      
+      ### PART 2: THE TRINITY OF VISIONS
+      
+      ⚠️ **CRITICAL RULES:**
+      1. **NO LAZINESS**: You MUST copy/paste the full biometric details into [MODEL SPECS] for EVERY prompt. Never write "same as above".
+      2. **STANDALONE PROMPTS**: Each prompt must be fully self-contained.
+      
+      **OUTPUT FORMAT:**
+      
+      ## 😇 THE SAINT (Ethereal, Divine, Pure)
+      > [Prompt Structure: MODEL SPECS -> HEAVENLY FASHION (White/Gold/Sheer) -> POSE (Graceful/Floating) -> LIGHTING (Soft/Diffused/Halo) -> AESTHETIC (Renaissance/High-Key)]
+      
+      ## 😈 THE SINNER (Corrupted, Dark, Provocative)
+      > [Prompt Structure: MODEL SPECS -> INFERNAL FASHION (Black/Leather/Distressed) -> POSE (Dominant/Twisted) -> LIGHTING (Harsh/Red/Shadows) -> AESTHETIC (Gothic/Low-Key)]
+      
+      ## ⚖️ THE INTEGRATION (The Hybrid Form)
+      > [Prompt Structure: MODEL SPECS -> HYBRID COUTURE (A single outfit merging both worlds: e.g., a white silk gown fading into black leather at the hem, or a studded leather jacket over a delicate lace veil) -> POSE (Conflict/Balance) -> LIGHTING (Complex interplay of warm and cold light) -> AESTHETIC (Surreal Fusion, NOT split screen)]
+
+
+  cinematic_storyboard:
+    description: "[1 Image] STORYBOARD. Generates a 3-shot narrative sequence: 1.Arrival (Wide), 2.Action (Medium), 3.Climax (Close-up). Creates a mini-movie scene."
+    template: |
+      You are a Film Director creating a storyboard sequence.
+      
+      **OBJECTIVE:** 
+      Create a coherent **3-SHOT NARRATIVE ARC** based on the subject's vibe.
+      Tell a micro-story through camera angles and action.
+      
+      **CRITICAL NATURALISM CONSTRAINTS:**
+      - **EYES (ULTRA-CRITICAL)**: Nuanced, natural colors only. No laser eyes.
+      - **SKIN DETAILS (STRICT)**: Default to clear skin. No hallucinated textures.
+      
+      ---
+      
+      ### PART 1: THE BIOMETRIC CORE (JSON)
+      [Extract standard JSON here first]
+      
+      ---
+      
+      ### PART 2: THE SCENE SEQUENCE
+      
+      ⚠️ **CRITICAL RULES:**
+      1. **NO LAZINESS**: You MUST copy/paste the full biometric details into [MODEL SPECS] for EVERY prompt. Never write "same as above".
+      2. **STANDALONE PROMPTS**: Each prompt must be fully self-contained.
+      
+      **OUTPUT FORMAT:**
+      
+      ## 🎬 SHOT 1: THE ARRIVAL (Establishing Shot / Wide Angle)
+      > [Prompt: Subject entering a specific location. Focus on Environment + Silhouette + Context. Wide angle lens (24mm).]
+      
+      ## 🎬 SHOT 2: THE ACTION (Medium Shot / Waist Up)
+      > [Prompt: Subject interacting with the environment or a prop. Dynamic pose. Focus on Outfit + Movement. Standard lens (50mm).]
+      
+      ## 🎬 SHOT 3: THE CLIMAX (Extreme Close-Up / Macro)
+      > [Prompt: Intense emotional reaction or gaze. Focus on Eyes + Skin Texture + Lips. Macro lens (85mm or 100mm).]
+
+
+  video_script_generator:
+    description: "[1 Image] VIDEO SCRIPT. Generates a 8-10 second video script with 3-4 shots, including camera movements, actions, and timing for AI video tools (Runway/Pika/Kling/Luma)."
+    template: |
+      You are a Video Director creating a short-form video script for AI video generation.
+      
+      **OBJECTIVE:** 
+      Create a **8-10 SECOND VIDEO SCRIPT** based on the subject's vibe.
+      Each shot must include: Subject description, Action, Camera movement, Duration.
+      
+      **CRITICAL NATURALISM CONSTRAINTS:**
+      - **EYES (ULTRA-CRITICAL)**: Nuanced, natural colors only. No laser eyes.
+      - **SKIN DETAILS (STRICT)**: Default to clear skin. No hallucinated textures.
+      - **CAMERA MOVEMENTS**: Use standard terms (pan, tilt, dolly, zoom, orbit). NO equipment names.
+      
+      ---
+      
+      ### PART 1: THE BIOMETRIC CORE (JSON)
+      [Extract standard JSON here first]
+      
+      ---
+      
+      ### PART 2: THE VIDEO SCRIPT (8-10 SECONDS TOTAL)
+      
+      ⚠️ **CRITICAL RULES:**
+      1. **NO LAZINESS**: You MUST copy/paste the full biometric details into [SUBJECT] for EVERY shot.
+      2. **TOTAL DURATION**: 8-10 seconds maximum.
+      3. **CAMERA MOVEMENTS**: Use realistic, smooth movements (slow pan, gentle zoom, subtle dolly).
+      4. **ACTIONS**: Keep actions simple and achievable by AI video (head turn, eye contact, slight smile). Avoid complex physics.
+      
+      **OUTPUT FORMAT:**
+      
+      ## 🎬 SHOT 1: [TITLE] (0:00-0:03 | 3 seconds)
+      **SUBJECT**: [Full biometric description from JSON]
+      **ACTION**: [What the subject does - e.g., "Turns head slowly from left to right, eyes following camera"]
+      **CAMERA**: [Movement - e.g., "Slow dolly forward (push-in)"]
+      **ENVIRONMENT**: [Setting - e.g., "Minimalist white studio, soft natural light from window"]
+      **MOOD**: [Emotion - e.g., "Contemplative, serene"]
+      
+      ## 🎬 SHOT 2: [TITLE] (0:03-0:06 | 3 seconds)
+      **SUBJECT**: [Full biometric description from JSON]
+      **ACTION**: [What the subject does]
+      **CAMERA**: [Movement]
+      **ENVIRONMENT**: [Setting]
+      **MOOD**: [Emotion]
+      
+      ## 🎬 SHOT 3: [TITLE] (0:06-0:10 | 4 seconds)
+      **SUBJECT**: [Full biometric description from JSON]
+      **ACTION**: [What the subject does]
+      **CAMERA**: [Movement]
+      **ENVIRONMENT**: [Setting]
+      **MOOD**: [Emotion]
+      
+      ---
+      
+      **FINAL NOTES FOR AI VIDEO GENERATION:**
+      - Recommended FPS: 24
+      - Aspect Ratio: 16:9 (landscape) or 9:16 (portrait)
+      - Motion Strength: Medium (avoid too much movement)
+      - Transition: Smooth cuts (no dissolves unless specified)
+
+
+  transformation_before_after:
+    description: "[1 Image] BEFORE & AFTER. Generates 2 contrasting images showing a transformation: Makeup, Character Arc, Battle Aftermath, or Time Passage. Same face, different state."
+    template: |
+      You are a Transformation Artist creating Before & After visual narratives.
+      
+      **OBJECTIVE:** 
+      Analyze the subject and create **2 CONTRASTING VERSIONS**: BEFORE and AFTER a transformation.
+      Keep the **EXACT SAME BIOMETRICS** but change the state/condition.
+      
+      **CRITICAL NATURALISM CONSTRAINTS:**
+      - **EYES (ULTRA-CRITICAL)**: Natural colors only. No laser eyes.
+      - **SKIN DETAILS (STRICT)**: Default to clear skin in BEFORE. You may add realistic wear/damage in AFTER if relevant.
+      - **LIGHTING = EFFECT, NOT SOURCE**: Describe the light itself, not equipment.
+      
+      ---
+      
+      ### PART 1: THE BIOMETRIC CORE (JSON)
+      [Extract standard JSON here first]
+      
+      ---
+      
+      ### PART 2: TRANSFORMATION TYPE SELECTION
+      
+      Based on the subject's vibe, choose ONE transformation type:
+      1. **MAKEUP TRANSFORMATION** (Natural → Glamour)
+      2. **CHARACTER ARC** (Innocent → Corrupted)
+      3. **BATTLE AFTERMATH** (Pristine → Battle-Worn)
+      4. **TIME PASSAGE** (Youth → Maturity)
+      
+      ---
+      
+      ### PART 3: THE TRANSFORMATION PAIR
+      
+      ⚠️ **CRITICAL RULES:**
+      1. **NO LAZINESS**: RE-WRITE full biometric details for BOTH prompts.
+      2. **SAME POSE**: Keep the same body position and camera angle for both.
+      3. **CLEAR CONTRAST**: The difference should be obvious but believable.
+      4. **DO NOT COPY SECTION HEADERS**: Skip "PART 3" and go directly to the output format below.
+      
+      **OUTPUT FORMAT:**
+      
+      📸 BEFORE: [Transformation Type - Initial State]
+      
+      **[MODEL SPECS]**: [Full biometric description from JSON]
+      
+      **[STATE & CONDITION]**: [Describe the initial state - e.g., "Fresh, natural makeup-free skin", "Innocent expression, clean clothing", "Pristine armor, no damage"]
+      
+      **[OUTFIT & STYLING]**: [Detailed clothing/hair/makeup for BEFORE state]
+      
+      **[POSE]**: [Exact body position - MUST BE SAME in AFTER]
+      
+      **[LIGHTING]**: [Lighting effect for BEFORE - e.g., "Soft morning light", "Neutral studio illumination"]
+      
+      **[AESTHETIC]**: [Style reference, 8k, finish]
+      
+      ---
+      
+      📸 AFTER: [Transformation Type - Final State]
+      
+      **[MODEL SPECS]**: [SAME full biometric description - RE-WRITE IT]
+      
+      **[STATE & CONDITION]**: [Describe the transformed state - e.g., "Dramatic makeup with smokey eyes", "Hardened expression, torn clothing", "Dented armor, dirt and blood"]
+      
+      **[OUTFIT & STYLING]**: [Detailed clothing/hair/makeup for AFTER state - show the change]
+      
+      **[POSE]**: [EXACT SAME body position as BEFORE]
+      
+      **[LIGHTING]**: [Lighting effect for AFTER - may be different to enhance drama]
+      
+      **[AESTHETIC]**: [Style reference, 8k, finish]
+      
+      ---
+      
+      **TRANSFORMATION NOTES:**
+      - Ensure the change is dramatic but realistic
+      - Maintain facial structure and body proportions
+      - Focus on surface changes (makeup, wear, expression, lighting)
+      
+      ---
+      
+      🎬 BONUS: VIDEO TRANSITION SCRIPT (BEFORE → AFTER)
+      
+      **For AI Video Generation (Runway/Pika/Kling/Luma):**
+      
+      **START FRAME**: Use the BEFORE image as the first frame
+      **END FRAME**: Use the AFTER image as the last frame
+      **DURATION**: 5-8 seconds
+      **TRANSITION TYPE**: Smooth morph/transformation
+      
+      **PROMPT FOR VIDEO AI**:
+      "Gradual transformation from [BEFORE state] to [AFTER state]. The subject's face remains static in pose, but [describe the changes: makeup appears, skin texture changes, clothing transforms, lighting shifts]. Camera is locked, no movement. Focus on the metamorphosis of surface details. Smooth, organic transition. Cinematic quality, 24fps."
+      
+      **TECHNICAL SETTINGS**:
+      - Motion Strength: Low to Medium (avoid camera movement, focus on subject transformation)
+      - Aspect Ratio: Match source image
+      - Interpolation: Smooth (enable motion blur if available)
+      - Seed Consistency: Use same seed for both frames if possible
+
+
+style_categories:
+  "📸 Photography":
+    - "Kodak Portra 400 (Warm Film)"
+    - "Fujifilm Velvia (Saturated Landscape)"
+    - "Ilford HP5 (Classic B&W Film)"
+    - "Polaroid SX-70 (Vintage Instant)"
+    - "Lomography (Light Leaks & Vignette)"
+    - "National Geographic Documentary"
+    - "Hyper-Realistic 8K Portrait"
+    - "Film Noir (High Contrast B&W)"
+  
+  "🎬 Cinematic":
+    - "Wes Anderson Symmetry"
+    - "Blade Runner Cyberpunk"
+    - "Sin City High Contrast"
+    - "Wong Kar-wai Neon Melancholy"
+    - "Mad Max Post-Apocalyptic"
+    - "Terrence Malick Golden Hour"
+    - "CCTV Security Footage"
+  
+  "🎨 Art Movements":
+    - "Salvador Dali Surrealism"
+    - "Renaissance Oil Painting"
+    - "Abstract Expressionism"
+    - "Chiaroscuro (Caravaggio)"
+    - "Art Nouveau (Mucha Style)"
+    - "Ukiyo-e Japanese Woodblock"
+    - "Pop Art (Warhol Style)"
+  
+  "💻 Digital & 3D":
+    - "Unreal Engine 5 Photorealistic"
+    - "Pixar 3D Animation"
+    - "Blender 3D Cartoon"
+    - "Low Poly PS1 Retro"
+    - "Voxel Art (Minecraft Style)"
+    - "Isometric 3D Room"
+  
+  "👗 Fashion & Editorial":
+    - "Vogue Avant-Garde Fashion"
+    - "Helmut Newton B&W Glamour"
+    - "Terry Richardson Flash Photography"
+    - "Juergen Teller Raw Editorial"
+  
+  "🌀 Experimental":
+    - "Glitch Art Horror"
+    - "Psychedelic LSD Trip"
+    - "Cyberpunk Noir"
+    - "Cyber-Goth Neon"
+    - "Vaporwave Aesthetic"
+    - "Thermal Vision Camera"
+    - "Infrared Photography (B&W, Pale Skin, Dark Eyes)"
+    - "Double Exposure"
+  
+  "🔥 Provocative & Uncensored":
+    - "NSFW Fashion (Latex, Bondage Couture)"
+    - "Disturbing Surrealism (Dali meets Eros)"
+    - "Extreme Close-Up (Skin Texture, Sweat, Pores)"
+    - "Helmut Newton Explicit (Uncensored B&W)"
+    - "Nobuyoshi Araki (Japanese Erotic Photography)"
+    - "Terry Richardson Raw (Unfiltered Flash)"
+    - "Fetish Editorial (High Fashion meets BDSM)"
+    - "Provocative Pin-Up (50s Playboy Style)"
+    - "Anatomical Study (Medical/Renaissance Nude)"
+    - "Wet Look (Water, Oil, Sweat on Skin)"
+    - "Sheer Fabric (Transparent, Backlit)"
+    - "Boudoir Photography (Intimate, Sensual)"
+    - "Topless Editorial (Artistic Nude)"
+    - "Bare Shoulders (Off-Shoulder Elegance)"
+    - "Shirtless Portrait (Natural Light)"
+  
+  "🎌 Anime & Illustration":
+    - "90s Anime (Cel Shading)"
+    - "Studio Ghibli Watercolor"
+    - "Manga Ink Drawing"
+    - "Ethereal Fantasy Illustration"
+  
+  "⏳ Vintage & Retro":
+    - "Victorian Steampunk"
+    - "1920s Art Deco"
+    - "1950s Technicolor"
+    - "1980s VHS Camcorder"
+    - "Claymation Stop-Motion"
+

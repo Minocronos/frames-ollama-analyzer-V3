@@ -1,0 +1,54 @@
+# ========================================
+# Python-generated files
+# ========================================
+__pycache__/
+*.py[oc]
+*.pyd
+*.so
+*.dll
+build/
+dist/
+wheels/
+*.egg-info
+*.egg
+
+# ========================================
+# Virtual environments (NE PAS TRANSPORTER)
+# ========================================
+.venv/
+venv/
+ENV/
+env/
+
+# ========================================
+# IDE & Editor files
+# ========================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# ========================================
+# User-generated data
+# ========================================
+saved_collections/
+frames-analyzer-V3-export.zip
+history.db
+
+# ========================================
+# Temporary & Log files
+# ========================================
+*.log
+*.tmp
+.cache/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# ========================================
+# OS files
+# ========================================
+Thumbs.db
+desktop.ini
