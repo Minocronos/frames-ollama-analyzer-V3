@@ -913,128 +913,125 @@ You MUST generate ONLY the following looks: {selected_looks_str}
             st.divider()
         # -------------------------------------
 
-                    # Display parsed prompts
-                    if parsed['prompts']:
-                        st.markdown("### 📋 **COPY-READY PROMPTS**")
-                        st.caption("💡 Final prompts are shown first (expanded). Intermediate analysis is below (collapsed).")
+        # Display parsed prompts
+        if parsed['prompts']:
+            st.markdown("### 📋 **COPY-READY PROMPTS**")
+            st.caption("💡 Final prompts are shown first (expanded). Intermediate analysis is below (collapsed).")
+            
+            # Separate prompts into final and intermediate
+            final_prompts = []
+            intermediate_prompts = []
+            
+            for i, (title, content) in enumerate(parsed['prompts']):
+                title_lower = title.lower()
+                is_final = any(x in title_lower for x in ['unified', 'final', 'reproduction', 'prompt', 'look', 'variant'])
+                is_intermediate = any(x in title_lower for x in ['logic', 'reasoning', 'analysis', 'layer', 'json'])
+                
+                if is_final or (not is_intermediate):
+                    final_prompts.append((i, title, content, True))
+                else:
+                    intermediate_prompts.append((i, title, content, False))
+            
+            # Display final prompts first, then intermediate
+            all_ordered_prompts = final_prompts + intermediate_prompts
+            
+            if len(parsed['prompts']) <= 2:
+                all_ordered_prompts = [(i, t, c, True) for i, t, c, _ in all_ordered_prompts]
+            
+            for i, title, content, should_expand in all_ordered_prompts:
+                with st.expander(f"**{title}**", expanded=should_expand):
+                    st.code(content, language="markdown")
+                    
+                    # Info and download button
+                    col1, col2 = st.columns([2, 1])
+                    with col1:
+                        st.caption(f"✨ {len(content)} characters")
+                    with col2:
+                        import datetime
+                        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                        file_timestamp = datetime.datetime.now().strftime("%d%m%Y_%H%M%S")
                         
-                        # Separate prompts into final and intermediate
-                        final_prompts = []
-                        intermediate_prompts = []
+                        title_words = title.split()[:5]
+                        short_title = "_".join(title_words).lower()
+                        short_title = "".join(c if c.isalnum() or c == "_" else "" for c in short_title)
+                        filename = f"{short_title}_{file_timestamp}.txt"
                         
-                        for i, (title, content) in enumerate(parsed['prompts']):
-                            title_lower = title.lower()
-                            is_final = any(x in title_lower for x in ['unified', 'final', 'reproduction', 'prompt', 'look', 'variant'])
-                            is_intermediate = any(x in title_lower for x in ['logic', 'reasoning', 'analysis', 'layer', 'json'])
-                            
-                            if is_final or (not is_intermediate):
-                                final_prompts.append((i, title, content, True))
-                            else:
-                                intermediate_prompts.append((i, title, content, False))
-                        
-                        # Display final prompts first, then intermediate
-                        all_ordered_prompts = final_prompts + intermediate_prompts
-                        
-                        if len(parsed['prompts']) <= 2:
-                            all_ordered_prompts = [(i, t, c, True) for i, t, c, _ in all_ordered_prompts]
-                        
-                        for i, title, content, should_expand in all_ordered_prompts:
-                            with st.expander(f"**{title}**", expanded=should_expand):
-                                st.code(content, language="markdown")
-                                
-                                # Info and download button
-                                col1, col2 = st.columns([2, 1])
-                                with col1:
-                                    st.caption(f"✨ {len(content)} characters")
-                                with col2:
-                                    import datetime
-                                    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                                    file_timestamp = datetime.datetime.now().strftime("%d%m%Y_%H%M%S")
-                                    
-                                    title_words = title.split()[:5]
-                                    short_title = "_".join(title_words).lower()
-                                    short_title = "".join(c if c.isalnum() or c == "_" else "" for c in short_title)
-                                    filename = f"{short_title}_{file_timestamp}.txt"
-                                    
-                                    metadata_footer = f"""
+                        metadata_footer = f"""
 # ========================================
 # GENERATION INFO
 # ========================================
 # Generated: {timestamp}
 # Analysis Mode: {analysis_mode}
 """
-                                    if selected_style:
-                                        metadata_footer += f"# Style: {selected_style}\n"
-                                    
-                                    metadata_footer += "# ========================================\n"
-                                    
-                                    st.download_button(
-                                        label="💾 Download",
-                                        data=content + metadata_footer,
-                                        file_name=filename,
-                                        mime="text/plain",
-                                        key=f"dl_btn_{i}"
-                                    )
-                                
-                                # --- DATASET SAVING UI ---
-                                st.divider()
-                                st.caption("🧠 **Add to Training Dataset**")
-                                c_rate, c_comment, c_btn = st.columns([3, 2, 1])
-                                
-                                with c_rate:
-                                    rating = st.feedback("stars", key=f"rating_{i}")
-                                
-                                with c_comment:
-                                    comment = st.text_input("Comment", placeholder="Optional...", key=f"comment_{i}", label_visibility="collapsed")
-                                
-                                with c_btn:
-                                    if st.button("💾", key=f"save_db_{i}", use_container_width=True):
-                                        ref_image = "unknown"
-                                        if selected_items and isinstance(selected_items[0], str):
-                                            ref_image = os.path.basename(selected_items[0])
-                                        elif 'video_frames' in st.session_state:
-                                            ref_image = "video_frame_extraction"
-                                            
-                                        final_rating = (rating + 1) if rating is not None else 0
-                                        
-                                        db.save_analysis(
-                                            image_name=ref_image,
-                                            mode=analysis_mode,
-                                            style=selected_style,
-                                            model=selected_model,
-                                            prompt_content=content,
-                                            rating=final_rating,
-                                            comment=comment
-                                        )
-                                        st.toast(f"✅ Saved with {final_rating} stars!", icon="💾")
-
-                    # Display JSON data for biometric modes
-                    if parsed['json_data']:
-                        import datetime
-                        ts = datetime.datetime.now().strftime("%d%m%Y%H%M%S")
-                        filename = f"biome_ID_{ts}.json"
+                        if selected_style:
+                            metadata_footer += f"# Style: {selected_style}\n"
                         
-                        if isinstance(parsed['json_data'], dict):
-                            parsed['json_data']["id"] = f"ID_{ts}"
-                        
-                        st.divider()
-                        st.subheader("🧬 Biometric Data Extracted")
-                        
-                        with st.expander("🔍 Inspect Raw JSON Data", expanded=False):
-                            st.json(parsed['json_data'])
+                        metadata_footer += "# ========================================\n"
                         
                         st.download_button(
-                            label=f"📥 Download {filename}",
-                            data=json.dumps(parsed['json_data'], indent=4),
+                            label="💾 Download",
+                            data=content + metadata_footer,
                             file_name=filename,
-                            mime="application/json",
-                            type="primary"
+                            mime="text/plain",
+                            key=f"dl_btn_{i}"
                         )
-                    elif analysis_mode in ["ultimate_biome_fashion_icon", "fetish_mode_shorts", "biome_ultra_detailed"]:
-                        st.warning("⚠️ No JSON block found in the response.")
                     
-                except Exception as e:
-                    st.error(f"Analysis Error: {str(e)}")
+                    # --- DATASET SAVING UI ---
+                    st.divider()
+                    st.caption("🧠 **Add to Training Dataset**")
+                    c_rate, c_comment, c_btn = st.columns([3, 2, 1])
+                    
+                    with c_rate:
+                        rating = st.feedback("stars", key=f"rating_{i}")
+                    
+                    with c_comment:
+                        comment = st.text_input("Comment", placeholder="Optional...", key=f"comment_{i}", label_visibility="collapsed")
+                    
+                    with c_btn:
+                        if st.button("💾", key=f"save_db_{i}", use_container_width=True):
+                            ref_image = "unknown"
+                            if selected_items and isinstance(selected_items[0], str):
+                                ref_image = os.path.basename(selected_items[0])
+                            elif 'video_frames' in st.session_state:
+                                ref_image = "video_frame_extraction"
+                                
+                            final_rating = (rating + 1) if rating is not None else 0
+                            
+                            db.save_analysis(
+                                image_name=ref_image,
+                                mode=analysis_mode,
+                                style=selected_style,
+                                model=selected_model,
+                                prompt_content=content,
+                                rating=final_rating,
+                                comment=comment
+                            )
+                            st.toast(f"✅ Saved with {final_rating} stars!", icon="💾")
+
+        # Display JSON data for biometric modes
+        if parsed['json_data']:
+            import datetime
+            ts = datetime.datetime.now().strftime("%d%m%Y%H%M%S")
+            filename = f"biome_ID_{ts}.json"
+            
+            if isinstance(parsed['json_data'], dict):
+                parsed['json_data']["id"] = f"ID_{ts}"
+            
+            st.divider()
+            st.subheader("🧬 Biometric Data Extracted")
+            
+            with st.expander("🔍 Inspect Raw JSON Data", expanded=False):
+                st.json(parsed['json_data'])
+            
+            st.download_button(
+                label=f"📥 Download {filename}",
+                data=json.dumps(parsed['json_data'], indent=4),
+                file_name=filename,
+                mime="application/json",
+                type="primary"
+            )
+        elif analysis_mode in ["ultimate_biome_fashion_icon", "fetish_mode_shorts", "biome_ultra_detailed"]:
+            st.warning("⚠️ No JSON block found in the response.")
 
     # Display last analysis results (persists across reruns)
     if 'last_analysis' in st.session_state:
