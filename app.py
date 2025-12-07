@@ -1009,6 +1009,7 @@ IF YOU IGNORE THIS INSTRUCTION, THE OUTPUT WILL BE REJECTED.
                                 "Master Identity JSON", 
                                 value=json_str, 
                                 height=300,
+                                key="json_editor_area", # Add a key for stability
                                 help="Modify values here (e.g. change eye color) then click LOCK."
                             )
                             
@@ -1019,6 +1020,7 @@ IF YOU IGNORE THIS INSTRUCTION, THE OUTPUT WILL BE REJECTED.
                                         # Parse the edited string back to JSON
                                         edited_json = json.loads(edited_json_str)
                                         st.session_state['master_identity'] = edited_json
+                                        st.session_state['lock_confirmed'] = True # Flag to confirm lock
                                         st.toast("🧬 DNA LOCKED! You can now generate consistent characters.", icon="🔒")
                                         st.rerun()
                                     except json.JSONDecodeError:
