@@ -34,7 +34,19 @@ class ResultAdapter:
         }
         
         # Extract JSON if applicable
-        if mode in ["ultimate_biome_fashion_icon", "fetish_mode_shorts", "biome_ultra_detailed"]:
+        # Extract JSON if applicable
+        # Expanded list to include all modes that produce JSON data
+        json_modes = [
+            "ultimate_biome_fashion_icon", 
+            "fetish_mode_shorts", 
+            "biome_ultra_detailed",
+            "biometric_complete",
+            "deepstack_biometrics",
+            "experimental_fashion_lab",
+            "alt_pov"
+        ]
+        
+        if mode in json_modes:
             result['json_data'] = self._extract_json(text)
         
         # Extract structured prompts

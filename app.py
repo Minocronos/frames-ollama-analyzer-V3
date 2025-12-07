@@ -101,6 +101,21 @@ with st.sidebar:
     st.caption("🚀 The Engine for **Quantum Haute Couture**")
     st.caption("*Fusion Logic & Biometric Fidelity*")
     
+    # --- CHARACTER LOCKING UI ---
+    if 'master_identity' in st.session_state and st.session_state['master_identity']:
+        st.success("🔒 **IDENTITY LOCKED**")
+        with st.expander("🧬 Master Identity Data", expanded=False):
+            st.json(st.session_state['master_identity'])
+            if st.button("🗑️ Unlock / Reset Identity"):
+                del st.session_state['master_identity']
+                st.rerun()
+        
+        use_locked_identity = st.checkbox("Use Locked Identity", value=True, help="Force AI to use this biometric data for all generations.")
+    else:
+        st.info("🔓 No Identity Locked")
+        use_locked_identity = False
+    # ---------------------------
+    
     # Model Selection
     try:
         models_info = ollama.list()
@@ -717,6 +732,36 @@ if has_video or has_images:
                 else:
                     prompt_text = template_str
                 
+                # --- CHARACTER LOCKING INJECTION ---
+                if use_locked_identity and 'master_identity' in st.session_state:
+                    master_id_json = json.dumps(st.session_state['master_identity'], indent=2)
+                    injection_text = f"""
+\n\n═══════════════════════════════════════════════════════════════
+⚠️ **CRITICAL INSTRUCTION: CHARACTER CONSISTENCY LOCK** ⚠️
+═══════════════════════════════════════════════════════════════
+
+You must strictly adhere to the following **MASTER BIOMETRIC DNA** for the subject.
+**DO NOT** re-invent or guess facial features.
+**DO NOT** allow the artistic style to alter the bone structure or key measurements.
+**YOU MUST** apply the requested style (lighting, clothing, mood) onto THIS specific face/body.
+
+**🧬 MASTER IDENTITY DATA (Immutable):**
+```json
+{master_id_json}
+```
+
+**MANDATORY RULES:**
+1. **Face Shape & Features:** Must match the JSON exactly (Eyes, Nose, Mouth, Jaw).
+2. **Body Type:** Must match the JSON somatotype and proportions.
+3. **Skin Details:** Preserve specific marks/texture described in the JSON.
+4. **Style Application:** Apply the style AROUND this identity. Do not morph the identity to fit the style.
+
+═══════════════════════════════════════════════════════════════\n\n
+"""
+                    prompt_text = injection_text + prompt_text
+                    st.toast("🧬 Master Identity Injected into Prompt!", icon="🔒")
+                # -----------------------------------
+                
                 # Inject Weights & Focus Info for fusion modes AND biometric modes (alt_pov, ultimate_biome_fashion_icon, etc.)
                 # This allows granular control over which aspects to extract from each image
                 biometric_modes = ["alt_pov", "ultimate_biome_fashion_icon", "experimental_fashion_lab", "biome_ultra_detailed"]
@@ -939,6 +984,19 @@ IF YOU IGNORE THIS INSTRUCTION, THE OUTPUT WILL BE REJECTED.
                         'model': selected_model,
                         'items': selected_items
                     }
+                    
+                    # --- CHARACTER LOCKING SAVE BUTTON ---
+                    if parsed.get('json_data'):
+                        st.divider()
+                        col_lock, col_info = st.columns([1, 3])
+                        with col_lock:
+                            if st.button("💾 Save as Master Identity", key="btn_save_identity", type="primary", help="Lock this biometric data for future generations."):
+                                st.session_state['master_identity'] = parsed['json_data']
+                                st.toast("Identity Locked! Check the Sidebar.", icon="🔒")
+                                st.rerun()
+                        with col_info:
+                            st.info("👆 Click to lock this face/body for consistent character generation.")
+                    # -------------------------------------
                     
                     # Display parsed prompts
                     if parsed['prompts']:

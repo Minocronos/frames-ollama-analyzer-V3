@@ -52,4 +52,47 @@ Au lieu de juste *utiliser* l'IA, vous *créez de la valeur*.
 
 ---
 
+## 📅 Session : Fusion Intelligente & Character Locking (07/12/2025)
+
+### 1. Le Problème de la "Fusion Aveugle"
+**Le Problème :**
+Dans l'interface, l'utilisateur choisit "Focus: Face" pour l'image A et "Focus: Body" pour l'image B.
+Mais le code envoyait juste les deux images à l'IA sans lui expliquer ces rôles. L'IA faisait une "moyenne" floue.
+
+**La Solution (Injection de Contexte) :**
+On a modifié `app.py` pour traduire les choix de l'UI en instructions textuelles pour le prompt.
+
+**Le Code Clé (`app.py`) :**
+```python
+# On construit une "Carte des Rôles"
+if focus == "Character/Face":
+    instruction = "(STRICTLY EXTRACT FACE. IGNORE CLOTHING.)"
+elif focus == "Clothing":
+    instruction = "(STRICTLY EXTRACT OUTFIT. IGNORE FACE.)"
+
+# On l'injecte dans le prompt final
+prompt_text = f"""
+USER ASSIGNED ROLES:
+- Image 1: {instruction_1}
+- Image 2: {instruction_2}
+
+PRIORITY RULE:
+If Image 1 is 'Face', use ONLY Image 1 for facial features.
+""" + prompt_text
+```
+
+### 2. Le Concept de "Character Locking" (Verrouillage d'Identité)
+**L'Objectif :**
+Garder le même visage exactement sur 50 générations différentes (Cyberpunk, Mode, etc.).
+
+**L'Architecture "Master Identity" :**
+1.  **Analyse** : On fait un scan biométrique complet (`biometric_complete`).
+2.  **Stockage** : On sauvegarde le résultat JSON dans la mémoire de session (`st.session_state['master_identity']`).
+3.  **Injection** : Pour les générations suivantes, on force l'IA à utiliser ce JSON comme "Vérité Absolue".
+
+**Pourquoi c'est mieux que le "Fine-tuning" ?**
+C'est instantané (pas d'entraînement), gratuit, et flexible (on peut éditer le JSON à la main).
+
+---
+
 *À suivre...*
