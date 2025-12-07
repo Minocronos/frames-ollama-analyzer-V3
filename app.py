@@ -1261,15 +1261,16 @@ if 'current_result' in st.session_state:
         st.caption(f"Mode: {last['mode']} | Style: {last.get('style', 'N/A')} | Model: {last['model']}")
         
         # Display prompts
-        if last['prompts']:
-            for i, (title, content) in enumerate(last['prompts']):
+        parsed_last = last.get('parsed', {})
+        if parsed_last.get('prompts'):
+            for i, (title, content) in enumerate(parsed_last['prompts']):
                 # Determine if this is a "Final" or "Important" prompt to expand by default
                 title_lower = title.lower()
                 is_final = any(x in title_lower for x in ['unified', 'final', 'reproduction', 'prompt', 'look', 'variant'])
                 is_intermediate = any(x in title_lower for x in ['logic', 'reasoning', 'analysis', 'layer', 'json'])
                 
                 should_expand = is_final or (not is_intermediate)
-                if len(last['prompts']) <= 2:
+                if len(parsed_last['prompts']) <= 2:
                     should_expand = True
 
                 # SPECIAL DISPLAY FOR ALT_POV (SMART TABS)
