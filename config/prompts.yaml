@@ -92,40 +92,46 @@ analysis_modes:
       {
         "id": "ID_PLACEHOLDER",
         "gender": "female or male",
-        "age_est": 0,
+        "age_est": 25,
+        "hair": {
+          "color": "color name",
+          "style": "style description",
+          "length": "short/medium/long",
+          "description": "Detailed description of texture, cut, and behavior"
+        },
         "face": {
-          "shape": "oval",
-          "description": "Detailed facial description",
+          "shape": "oval/square/heart/etc",
+          "description": "Comprehensive description of facial structure, cheekbones, and jawline",
           "symmetry_percent": 95,
           "eyes": { 
-            "color": "natural color",
-            "shape": "almond",
-            "description": "Detailed eye description",
-            "intercanthal_mm": 0
+            "color": "iris color",
+            "shape": "almond/round/hooded",
+            "description": "Detailed description of iris pattern, eyelids, lashes, and expression",
+            "intercanthal_mm": 35
           },
           "nose": { 
-            "nasofrontal_angle_deg": 0,
-            "description": "Detailed nose description"
+            "nasofrontal_angle_deg": 125,
+            "description": "Detailed description of bridge, tip, nostrils, and profile"
           },
           "mouth": { 
-            "upper_lip_mm": 0,
-            "lower_lip_mm": 0,
-            "description": "Detailed lip description"
+            "upper_lip_mm": 10,
+            "lower_lip_mm": 12,
+            "description": "Detailed description of lips, cupid's bow, and texture"
           },
-          "mandibular_angle_deg": 0
+          "mandibular_angle_deg": 115
         },
         "body": {
-          "somatotype": "ectomorphic or mesomorphic or endomorphic",
-          "description": "Detailed body description",
-          "body_fat_percent": 0,
-          "muscle_def": 0,
+          "somatotype": "ectomorphic/mesomorphic/endomorphic",
+          "description": "Detailed description of frame, shoulders, waist, hips, and limbs",
+          "body_fat_percent": 18,
+          "muscle_def": 5,
           "head_to_body_ratio": "1:7.5",
-          "shoulder_to_hip_ratio": "1:1.2"
+          "shoulder_to_hip_ratio": "1:0.95"
         },
         "skin": {
           "fitzpatrick": 2,
-          "texture": "fine",
-          "description": "Detailed skin description"
+          "texture": "fine/medium/coarse",
+          "description": "Detailed description of pores, complexion, freckles, scars, and micro-texture"
         }
       }
       ```
@@ -309,40 +315,46 @@ analysis_modes:
       {
         "id": "ID_PLACEHOLDER",
         "gender": "female or male",
-        "age_est": 0,
+        "age_est": 25,
+        "hair": {
+          "color": "color name",
+          "style": "style description",
+          "length": "short/medium/long",
+          "description": "Detailed description of texture, cut, and behavior"
+        },
         "face": {
-          "shape": "oval",
-          "description": "Detailed facial description",
+          "shape": "oval/square/heart/etc",
+          "description": "Comprehensive description of facial structure, cheekbones, and jawline",
           "symmetry_percent": 95,
           "eyes": { 
-            "color": "natural color",
-            "shape": "almond",
-            "description": "Detailed eye description",
-            "intercanthal_mm": 0
+            "color": "iris color",
+            "shape": "almond/round/hooded",
+            "description": "Detailed description of iris pattern, eyelids, lashes, and expression",
+            "intercanthal_mm": 35
           },
           "nose": { 
-            "nasofrontal_angle_deg": 0,
-            "description": "Detailed nose description"
+            "nasofrontal_angle_deg": 125,
+            "description": "Detailed description of bridge, tip, nostrils, and profile"
           },
           "mouth": { 
-            "upper_lip_mm": 0,
-            "lower_lip_mm": 0,
-            "description": "Detailed lip description"
+            "upper_lip_mm": 10,
+            "lower_lip_mm": 12,
+            "description": "Detailed description of lips, cupid's bow, and texture"
           },
-          "mandibular_angle_deg": 0
+          "mandibular_angle_deg": 115
         },
         "body": {
-          "somatotype": "ectomorphic or mesomorphic or endomorphic",
-          "description": "Detailed body description",
-          "body_fat_percent": 0,
-          "muscle_def": 0,
+          "somatotype": "ectomorphic/mesomorphic/endomorphic",
+          "description": "Detailed description of frame, shoulders, waist, hips, and limbs",
+          "body_fat_percent": 18,
+          "muscle_def": 5,
           "head_to_body_ratio": "1:7.5",
-          "shoulder_to_hip_ratio": "1:1.2"
+          "shoulder_to_hip_ratio": "1:0.95"
         },
         "skin": {
           "fitzpatrick": 2,
-          "texture": "fine",
-          "description": "Detailed skin description"
+          "texture": "fine/medium/coarse",
+          "description": "Detailed description of pores, complexion, freckles, scars, and micro-texture"
         }
       }
       ```
@@ -531,6 +543,12 @@ analysis_modes:
         "id": "ID_PLACEHOLDER",
         "gender": "female",
         "age_est": 22,
+        "hair": {
+          "color": "color name",
+          "style": "style description",
+          "length": "short/medium/long",
+          "description": "Detailed description of texture, cut, and behavior"
+        },
         "face": {
           "shape": "oval",
           "description": "Delicate, symmetrical features with natural realism. Freckles prominent across nose and cheeks.",
@@ -613,16 +631,17 @@ analysis_modes:
       
       **OUTPUT FORMAT:**
       
-      ## 💎 THE FASHION TRILOGY
+      ## 💎 THE POV COLLECTION
       
-      **LOOK 1: INTIMATE COUTURE**
-      > [Full prompt following the 5-part structure]
+      ```markdown
+      **LOOK 1: LATEX NOIR + LOW ANGLE POV**
+      [Full prompt following the 5-part structure]
       
-      **LOOK 2: AVANT-GARDE MIX**
-      > [Full prompt following the 5-part structure]
+      **LOOK 2: LEATHER DARKNESS + OVERHEAD VIEW**
+      [Full prompt following the 5-part structure]
       
-      **LOOK 3: RAW EDITORIAL**
-      > [Full prompt following the 5-part structure]
+      ... (continue for all looks)
+      ```
 
 
 
@@ -655,52 +674,6 @@ analysis_modes:
       Extract the morpho-data to ensure the "Model" retains the subject's essence.
       *   **ID**: `ID_JJMMAAAAHHMMSS` (e.g., ID_25112025143000).
       *   **NON-HUMAN SUBJECTS**: If the subject is a robot, statue, or creature, ADAPT the schema (e.g., describe "skin" as "chassis material", "face" as "interface"). DO NOT SKIP THE JSON.
-      *   **Schema**: MUST include detailed "description" fields for visual nuance.
-      
-      ```json
-      {
-        "id": "ID_PLACEHOLDER",
-        "gender": "female or male",
-        "age_est": 0,
-        "face": {
-          "shape": "oval",
-          "description": "Detailed facial description",
-          "symmetry_percent": 95,
-          "eyes": { 
-            "color": "natural color",
-            "shape": "almond",
-            "description": "Detailed eye description",
-            "intercanthal_mm": 0
-          },
-          "nose": { 
-            "nasofrontal_angle_deg": 0,
-            "description": "Detailed nose description"
-          },
-          "mouth": { 
-            "upper_lip_mm": 0,
-            "lower_lip_mm": 0,
-            "description": "Detailed lip description"
-          },
-          "mandibular_angle_deg": 0
-        },
-        "body": {
-          "somatotype": "ectomorphic or mesomorphic or endomorphic",
-          "description": "Detailed body description",
-          "body_fat_percent": 0,
-          "muscle_def": 0,
-          "head_to_body_ratio": "1:7.5",
-          "shoulder_to_hip_ratio": "1:1.2"
-        },
-        "skin": {
-          "fitzpatrick": 2,
-          "texture": "fine",
-          "description": "Detailed skin description"
-        }
-      }
-      ```
-      
-      ---
-      
       ### PART 2: THE EXPERIMENTAL QUARTET (4 RADICAL LOOKS)
       
       ⚠️ **CRITICAL RULES:**
@@ -748,17 +721,15 @@ analysis_modes:
       
       ## 🔬 THE EXPERIMENTAL QUARTET
       
+      ```markdown
       **LOOK 1: BIO-TECH FUSION**
-      > [Full prompt following the 5-part structure]
+      [Full prompt following the 5-part structure]
       
       **LOOK 2: DATA-REACTIVE COUTURE**
-      > [Full prompt following the 5-part structure]
+      [Full prompt following the 5-part structure]
       
-      **LOOK 3: NEO-DECAY ELEGANCE**
-      > [Full prompt following the 5-part structure]
-      
-      **LOOK 4: ANTI-GENRE ARCHITECTURE**
-      > [Full prompt following the 5-part structure]
+      ...
+      ```
 
 
   alt_pov:
@@ -1033,26 +1004,6 @@ analysis_modes:
       *   **Outfit**: Cropped sports bra lifted just below breasts, denim micro-shorts unbuttoned revealing hip bones. Casual sensuality.
       *   **Materials**: Soft cotton sports bra, distressed denim with frayed edges, smooth skin with visible ab definition.
       *   **Lighting**: Golden hour window light from side creating warm glow on skin, soft natural shadows.
-      *   **Colors**: Warm honey tones, golden sunlight, soft grain, natural skin warmth, denim blue.
-
-      
-      **OUTPUT FORMAT:**
-      
-      ## 🔥 THE POV COLLECTION (22 RADICAL PERSPECTIVES)
-      
-      **LOOK 1: LATEX NOIR + LOW ANGLE POV**
-      > [Full prompt following the 6-part structure]
-      
-      **LOOK 2: LEATHER DARKNESS + OVERHEAD VIEW**
-      > [Full prompt following the 6-part structure]
-      
-      **LOOK 3: INDUSTRIAL ABYSS + WORM'S EYE GRATING POV**
-      > [Full prompt following the 6-part structure]
-      
-      **LOOK 4: X-RAY VISION + SKELETAL TRANSPARENCY POV**
-      > [Full prompt following the 6-part structure]
-      
-      **LOOK 5: SECURITY FOOTAGE + GLITCH CORRUPTION POV**
       > [Full prompt following the 6-part structure]
       
       **LOOK 6: MIRROR MAZE + INFINITE RECURSION POV**

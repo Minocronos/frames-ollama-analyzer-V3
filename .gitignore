@@ -1,54 +1,35 @@
-# ========================================
-# Python-generated files
-# ========================================
+# Python
 __pycache__/
-*.py[oc]
-*.pyd
+*.py[cod]
+*$py.class
 *.so
-*.dll
-build/
-dist/
-wheels/
-*.egg-info
-*.egg
-
-# ========================================
-# Virtual environments (NE PAS TRANSPORTER)
-# ========================================
+.Python
 .venv/
 venv/
 ENV/
 env/
 
-# ========================================
-# IDE & Editor files
-# ========================================
+# Streamlit
+.streamlit/secrets.toml
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# IDE
 .vscode/
 .idea/
 *.swp
 *.swo
-*~
+
+# OS
 .DS_Store
-
-# ========================================
-# User-generated data
-# ========================================
-saved_collections/
-frames-analyzer-V3-export.zip
-history.db
-
-# ========================================
-# Temporary & Log files
-# ========================================
-*.log
-*.tmp
-.cache/
-.pytest_cache/
-.coverage
-htmlcov/
-
-# ========================================
-# OS files
-# ========================================
 Thumbs.db
-desktop.ini
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.bak

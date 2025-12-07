@@ -36,25 +36,15 @@ class ResultAdapter:
         # Extract JSON if applicable
         # Extract JSON if applicable
         # Expanded list to include all modes that produce JSON data
-        json_modes = [
-            "ultimate_biome_fashion_icon", 
-            "fetish_mode_shorts", 
-            "biome_ultra_detailed",
-            "biometric_complete",
-            "deepstack_biometrics",
-            "experimental_fashion_lab",
-            "alt_pov"
-        ]
-        
-        if mode in json_modes:
-            result['json_data'] = self._extract_json(text)
+        # Always attempt to extract JSON, regardless of mode
+        result['json_data'] = self.extract_json(text)
         
         # Extract structured prompts
         result['prompts'] = self._extract_prompts(text)
         
         return result
     
-    def _extract_json(self, text: str) -> Optional[Dict]:
+    def extract_json(self, text: str) -> Optional[Dict]:
         """
         Extracts and validates JSON from markdown code blocks.
         
@@ -72,28 +62,54 @@ class ResultAdapter:
         match = re.search(r"```json\s*(.*?)\s*```", text, re.DOTALL)
         if match:
             json_str = match.group(1)
-        else:
-            # Strategy 2: Look for first ``` block (if model forgot 'json' tag)
-            match = re.search(r"```\s*(.*?)\s*```", text, re.DOTALL)
-            if match:
-                candidate = match.group(1).strip()
-                # Only accept if it starts with { (looks like JSON)
-                if candidate.startswith('{'):
-                    json_str = candidate
-            
-            if not json_str:
-                # Strategy 3: Look for raw JSON structure { ... }
-                match = re.search(r"\{.*\}", text, re.DOTALL)
-                if match:
-                    json_str = match.group(0)
-        
-        if json_str:
             try:
-                return json.loads(json_str)
-            except json.JSONDecodeError:
-                return None
+                return self._clean_and_parse(json_str)
+            except:
+                pass
+
+        # Strategy 2: Look for first ``` block
+        match = re.search(r"```\s*(.*?)\s*```", text, re.DOTALL)
+        if match:
+            candidate = match.group(1).strip()
+            if candidate.startswith('{'):
+                try:
+                    return self._clean_and_parse(candidate)
+                except:
+                    pass
+
+        # Strategy 3: Robust Raw Decode (The "Magic" Solution)
+        # Finds the first '{' and parses until valid JSON end, ignoring trailing text.
+        try:
+            start_idx = text.find('{')
+            if start_idx != -1:
+                # raw_decode returns (obj, end_index)
+                obj, _ = json.JSONDecoder().raw_decode(text, start_idx)
+                return obj
+        except Exception as e:
+            # print(f"Raw Decode Failed: {e}") # Silenced for production
+            pass
+            
+            # Strategy 4: Fallback to greedy regex (Last Resort)
+            # Only if raw_decode failed (e.g. due to comments or bad formatting inside)
+            match = re.search(r"\{.*\}", text, re.DOTALL)
+            if match:
+                try:
+                    return self._clean_and_parse(match.group(0))
+                except:
+                    pass
         
         return None
+
+    def _clean_and_parse(self, json_str: str) -> Dict:
+        """Helper to clean and parse JSON string"""
+        # Basic cleanup
+        json_str = json_str.strip()
+        # Remove C-style comments // ...
+        json_str = re.sub(r"//.*", "", json_str)
+        # Remove trailing commas
+        json_str = re.sub(r",\s*\}", "}", json_str)
+        json_str = re.sub(r",\s*\]", "]", json_str)
+        return json.loads(json_str)
     
     def _extract_prompts(self, text: str) -> List[Tuple[str, str]]:
         """

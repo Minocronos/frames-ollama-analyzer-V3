@@ -39,6 +39,28 @@ def load_config():
 
 settings, prompts = load_config()
 
+# --- GLOBAL CALLBACKS ---
+def lock_identity_callback():
+    """Callback to lock identity from the live editor or final result."""
+    try:
+        # Check both potential keys (live or final)
+        json_content = st.session_state.get("json_editor_area_live")
+        if not json_content:
+            json_content = st.session_state.get("json_editor_area")
+            
+        if json_content:
+            edited_json = json.loads(json_content)
+            st.session_state['master_identity'] = edited_json
+            st.toast("🧬 DNA LOCKED! Identity saved.", icon="🔒")
+        else:
+            st.warning("⚠️ No JSON content found to lock.")
+            
+    except json.JSONDecodeError:
+        st.error("❌ Invalid JSON! Cannot lock.")
+    except Exception as e:
+        st.error(f"Error locking identity: {e}")
+# ------------------------
+
 # Sidebar Reload Button (Must be placed early to affect the rest of the script)
 with st.sidebar:
     if st.button("🔄 Reload Config"):
@@ -244,29 +266,60 @@ with st.sidebar:
         st.session_state['alt_pov_selection'] = selected_looks
         
         
-        # Look Fidelity Slider
+        # --- RESET BUTTON ---
         st.divider()
+        if st.button("🔄 Reset Standard Settings", help="Remet les réglages par défaut (Transforme les vêtements, Texture équilibrée)."):
+            st.session_state['look_fidelity'] = 30
+            st.session_state['style_fidelity'] = 50
+            st.rerun()
+            
+        # Initialize defaults if not set
+        if 'look_fidelity' not in st.session_state: st.session_state['look_fidelity'] = 30
+        if 'style_fidelity' not in st.session_state: st.session_state['style_fidelity'] = 50
+
+        # Look Fidelity Slider
         look_fidelity = st.slider(
-            "🎚️ Fidélité (0-45% Source | 46-75% Mix | 76%+ Look)",
+            "🎚️ Fidélité Contenu (Tenue/Scène)",
             min_value=0,
             max_value=100,
-            value=70,
+            value=st.session_state['look_fidelity'],
             step=5,
-            help="0-45%: Garde Tenue Source | 46-75%: Mélange | 76-100%: Remplace par le Look",
+            key="slider_look_fidelity", # Use key to sync with session state
+            help="0-40%: Change la tenue (Mode Alt POV) | 80-100%: Garde la tenue d'origine",
             format="%d%%"
         )
         st.session_state['look_fidelity'] = look_fidelity
-        st.caption("📏 **Zones:** 0-45% (Keep Source Outfit) | 46-75% (Mix) | 76-100% (Replace with Look)")
         
         # Visual feedback
-        if look_fidelity <= 30:
-            st.caption("🎨 **Mode: Source Dominant** - LOOK provides aesthetic inspiration, keeps your clothing/pose")
-        elif look_fidelity <= 60:
-            st.caption("⚖️ **Mode: Balanced Blend** - Mix of LOOK style and source material")
-        elif look_fidelity <= 85:
-            st.caption("🔥 **Mode: LOOK Dominant** - Strong LOOK application, adapted to your subject")
+        if look_fidelity <= 40:
+            st.caption("✨ **Mode: Transformation** (L'IA met les costumes des Looks)")
+        elif look_fidelity <= 80:
+            st.caption("⚖️ **Mode: Mix** (Mélange tenue d'origine et Look)")
         else:
-            st.caption("⚡ **Mode: Pure LOOK** - Strict LOOK definition, source = biometrics only")
+            st.caption("🔒 **Mode: Strict** (Garde votre tenue d'origine)")
+
+        # Aesthetic Fidelity Slider
+        style_fidelity = st.slider(
+            "✨ Fidélité Esthétique (Grain/Texture)",
+            min_value=0,
+            max_value=100,
+            value=st.session_state['style_fidelity'],
+            step=5,
+            key="slider_style_fidelity",
+            help="0%: Digital Clean | 100%: Raw/Vintage",
+            format="%d%%"
+        )
+        st.session_state['style_fidelity'] = style_fidelity
+        
+        # Visual feedback
+        if style_fidelity <= 30:
+            st.caption("💎 **Mode: Digital Clean** (Lissé, 4K)")
+        elif style_fidelity <= 70:
+            st.caption("⚖️ **Mode: Standard** (Naturel)")
+        else:
+            st.caption("🎞️ **Mode: Raw** (Grain photo d'origine)")
+            
+        st.divider()
             
         with st.expander("💡 STRATEGY GUIDE: Focus vs Fidelity"):
             st.markdown("""
@@ -647,39 +700,12 @@ elif uploaded_file:
         if 'video_frames' in st.session_state:
             st.success(f"✅ {len(st.session_state['video_frames'])} frames extracted")
 
-# Analysis Section (Shown when frames are selected)
-has_video = 'video_frames' in st.session_state and st.session_state['video_frames']
-has_images = uploaded_images is not None and len(uploaded_images) > 0
 
-if has_video or has_images:
-    # Rebuild all_items and item_labels dynamically
-    all_items = []
-    item_labels = []
-    
-    if has_video:
-        for i, frame in enumerate(st.session_state['video_frames']):
-            all_items.append(frame)
-            item_labels.append(f"Frame {i+1}")
-    
-    # Use cached images from session_state
-    if 'cached_images' in st.session_state:
-        cached_names = st.session_state.get('cached_img_names', [])
-        for i, img in enumerate(st.session_state['cached_images']):
-            all_items.append(img)
-            name = cached_names[i] if i < len(cached_names) else "Image"
-            item_labels.append(f"📷 {name}")
-    
-
-    # Activity Log (Bottom of Sidebar)
-    with st.sidebar:
-        st.divider()
-        st.caption("Activity Log")
-        if 'video_frames' in st.session_state:
-            st.success(f"✅ {len(st.session_state['video_frames'])} frames extracted")
 
 # Analysis Section (Shown when frames are selected)
 has_video = 'video_frames' in st.session_state and st.session_state['video_frames']
-has_images = uploaded_images is not None and len(uploaded_images) > 0
+has_images = (uploaded_images is not None and len(uploaded_images) > 0) or \
+             ('cached_images' in st.session_state and len(st.session_state['cached_images']) > 0)
 
 if has_video or has_images:
     # Rebuild all_items and item_labels dynamically
@@ -715,6 +741,8 @@ if has_video or has_images:
         height=68
     )
 
+
+
     # Action Buttons
     ac1, ac2, ac3 = st.columns(3)
     
@@ -722,6 +750,8 @@ if has_video or has_images:
     with ac1:
         analyze_clicked = st.button(f"🚀 Analyze", key="btn_analyze_direct", type="primary", use_container_width=True)
         
+        # --- CALLBACKS ---
+
         if analyze_clicked:
             if not selected_indices:
                 st.warning("⚠️ Select items first!")
@@ -739,9 +769,18 @@ if has_video or has_images:
                 else:
                     prompt_text = template_str
                 
-                # --- CHARACTER LOCKING INJECTION ---
+                # --- CHARACTER LOCKING INJECTION & TEMPLATE MODIFICATION ---
                 if use_locked_identity and 'master_identity' in st.session_state and st.session_state['master_identity']:
                     master_id_json = json.dumps(st.session_state['master_identity'], indent=2)
+                    
+                    # 1. STRIP JSON INSTRUCTIONS FROM TEMPLATE (Force Skip)
+                    # We remove the mandate to output JSON so the model doesn't get confused.
+                    import re
+                    # Remove "PART 1... JSON" blocks and Schema examples
+                    prompt_text = re.sub(r"### PART 1:.*?```json.*?```", "", prompt_text, flags=re.DOTALL)
+                    prompt_text = re.sub(r"⚠️ \*\*CRITICAL - OUTPUT ORDER:\*\*.*?DO NOT skip the JSON\.", "", prompt_text, flags=re.DOTALL)
+                    
+                    # 2. INJECT LOCKED IDENTITY
                     injection_text = f"""
 \n\n═══════════════════════════════════════════════════════════════
 ⚠️ **CRITICAL INSTRUCTION: CHARACTER CONSISTENCY LOCK** ⚠️
@@ -762,6 +801,10 @@ You must strictly adhere to the following **MASTER BIOMETRIC DNA** for the subje
 2. **Body Type:** Must match the JSON somatotype and proportions.
 3. **Skin Details:** Preserve specific marks/texture described in the JSON.
 4. **Style Application:** Apply the style AROUND this identity. Do not morph the identity to fit the style.
+
+⚠️ **OUTPUT INSTRUCTION:**
+**PROCEED DIRECTLY TO THE LOOKS/PROMPTS.**
+**DO NOT** output the JSON block again. It is provided above as reference only.
 
 ═══════════════════════════════════════════════════════════════\n\n
 """
@@ -827,9 +870,27 @@ You MUST generate ONLY the following looks: {selected_looks_str}
                 # Inject Look Fidelity
                 if analysis_mode == "alt_pov" and 'look_fidelity' in st.session_state:
                     fidelity = st.session_state['look_fidelity']
-                    # ... (Simplified fidelity injection for brevity, assuming logic is similar) ...
-                    # For this refactor, I'm keeping the core logic but ensuring we capture the output
-                    pass 
+                    fidelity_instruction = f"""
+\n🎚️ **CREATIVE TRANSFORMATION LEVEL: {100 - fidelity}%**
+(Fidelity set to {fidelity}%)
+
+**INSTRUCTION BASED ON FIDELITY:**
+- **IF FIDELITY IS HIGH (>80%):** You must **PRESERVE the original outfit and environment**. The "Alt POV" should only be a change of camera angle. DO NOT change the clothes.
+- **IF FIDELITY IS MEDIUM (50-80%):** You may slightly modify the outfit (add accessories, change texture) but keep the core theme.
+- **IF FIDELITY IS LOW (<50%):** **FULL TRANSFORMATION ALLOWED.** You can completely change the outfit and scenario to match the requested "Look" (e.g., Latex, Sci-Fi, etc.). **IGNORE original clothes.**
+"""
+                    prompt_text = prompt_text + fidelity_instruction 
+
+                # Inject Aesthetic Fidelity
+                if analysis_mode == "alt_pov" and 'style_fidelity' in st.session_state:
+                    style_fid = st.session_state['style_fidelity']
+                    style_instruction = f"""
+\n🎞️ **AESTHETIC/TEXTURE INSTRUCTION:**
+- **Aesthetic Fidelity: {style_fid}%**
+- IF > 80%: PRESERVE all film grain, noise, blur, and lighting imperfections from the source. Do NOT clean it up.
+- IF < 40%: MODERNIZE the image. Remove noise, sharpen details, use 4K digital aesthetic.
+"""
+                    prompt_text = prompt_text + style_instruction 
 
                 # Inject Custom Instruction
                 if custom_instruction and custom_instruction.strip():
@@ -839,199 +900,357 @@ You MUST generate ONLY the following looks: {selected_looks_str}
                 st.info(f"**Prompt:** {prompt_text[:100]}...")
                 
                 try:
+                    from core.result_adapter import ResultAdapter
+                    adapter_parser = ResultAdapter()
                     adapter = OllamaAdapter(model_name=selected_model, temperature=temperature)
+                    
+                    json_placeholder = st.empty() # Placeholder for immediate JSON display
                     result_container = st.empty()
                     full_response = ""
+                    json_displayed = False
                     
                     for chunk in adapter.analyze(selected_items, prompt_text, stream=True):
                         full_response += chunk
                         result_container.markdown(full_response + "▌")
-                    
-                    result_container.empty() # Clear the streaming container
+                        
+                        # REAL-TIME JSON DETECTION (SIMPLIFIED & ROBUST)
+                        # Show if NO identity is locked OR if user explicitly disabled the lock (wants new DNA)
+                        has_locked_id = 'master_identity' in st.session_state and st.session_state['master_identity']
+                        allow_new_dna = not has_locked_id or not use_locked_identity
+                        
+                        if not json_displayed and allow_new_dna and len(full_response) > 20:
+                            try:
+                                # Find potential JSON block boundaries
+                                start_idx = full_response.find('{')
+                                end_idx = full_response.rfind('}')
+                                
+                                if start_idx != -1 and end_idx != -1 and end_idx > start_idx:
+                                    potential_json = full_response[start_idx : end_idx + 1]
+                                    
+                                    # Attempt to parse
+                                    parsed_json = json.loads(potential_json)
+                                    
+                                    # If we get here, it's valid JSON!
+                                    json_displayed = True
+                                    with json_placeholder.container():
+                                        st.divider()
+                                        st.markdown("### 🧬 **Identity DNA Detected**")
+                                        st.caption("👇 **EDITABLE DNA:** You can lock this immediately.")
+                                        
+                                        json_str_live = json.dumps(parsed_json, indent=4)
+                                        edited_json_str_live = st.text_area(
+                                            "Master Identity JSON", 
+                                            value=json_str_live, 
+                                            height=300,
+                                            key="json_editor_area_live",
+                                            help="Modify values here then click LOCK."
+                                        )
+                                        
+                                        col_lock_live, col_info_live = st.columns([1, 2])
+                                        with col_lock_live:
+                                            st.button(
+                                                "🧬 LOCK EDITED DNA", 
+                                                key="btn_save_identity_live", 
+                                                type="primary",
+                                                on_click=lock_identity_callback
+                                            )
+                                        with col_info_live:
+                                            st.info("👆 **Click to FREEZE & STOP.**")
+                                        st.divider()
+                            except json.JSONDecodeError:
+                                pass # Not a complete JSON yet, keep waiting
+                            except Exception:
+                                pass # Other errors, ignore
+
+                    # result_container.empty() # DO NOT CLEAR STREAMING OUTPUT
                     
                     # Parse response
                     from core.result_adapter import ResultAdapter
                     adapter_parser = ResultAdapter()
-                    parsed = adapter_parser.parse_response(full_response, analysis_mode)
                     
-                    # SAVE TO SESSION STATE FOR PERSISTENCE
+                    # Secure Save: Save raw data first
                     st.session_state['current_result'] = {
-                        'parsed': parsed,
+                        'parsed': {'prompts': [], 'json_data': None},
                         'full_response': full_response,
-                        'analysis_mode': analysis_mode,
-                        'selected_style': selected_style
+                        'mode': analysis_mode,
+                        'style': selected_style,
+                        'model': selected_model
                     }
-                    st.rerun() # Rerun to render from state
+                    
+                    try:
+                        parsed = adapter_parser.parse_response(full_response, analysis_mode)
+                        st.session_state['current_result']['parsed'] = parsed
+                    except Exception as e:
+                        st.error(f"⚠️ Parsing Error: {e}")
+                        # We still have the raw response in session_state, so fallback will show it.
+
+                    st.session_state['last_analysis'] = st.session_state['current_result']
+                    
+                    st.toast("✅ Analysis Complete!", icon="🎉")
                     
                 except Exception as e:
                     st.error(f"An error occurred: {e}")
 
-    # --- RENDER RESULTS FROM SESSION STATE ---
-    if 'current_result' in st.session_state:
-        res = st.session_state['current_result']
-        parsed = res['parsed']
-        
-        st.success("✅ Analysis Result (Persisted)")
-        
-        # --- CHARACTER LOCKING SAVE BUTTON (EDITABLE) ---
-        if parsed.get('json_data'):
-            st.divider()
-            with st.container():
-                st.markdown("### 🧬 **Identity DNA Detected**")
-                st.caption("👇 **EDITABLE DNA:** You can tweak the measurements below before locking.")
-                
-                # Convert JSON to string for editing
-                # Use session state to persist edits if available, else use parsed
-                if 'temp_json_edit' not in st.session_state:
-                     st.session_state['temp_json_edit'] = json.dumps(parsed['json_data'], indent=2)
-                
-                # Editable Text Area
-                edited_json_str = st.text_area(
-                    "Master Identity JSON", 
-                    value=st.session_state['temp_json_edit'],
-                    height=300,
-                    key="json_editor_area",
-                    help="Modify values here (e.g. change eye color) then click LOCK."
+# --- RENDER RESULTS FROM SESSION STATE ---
+if 'current_result' in st.session_state:
+    res = st.session_state['current_result']
+    parsed = res['parsed']
+    
+    st.success("✅ Analysis Result (Persisted)")
+    
+    # --- CHARACTER LOCKING SAVE BUTTON (EDITABLE) ---
+    # Show editor if we have new JSON data OR if we have a locked identity (so user can see/edit it)
+    current_json = parsed.get('json_data')
+    locked_json = st.session_state.get('master_identity')
+    
+    if current_json or locked_json:
+        st.divider()
+        with st.container():
+            st.markdown("### 🧬 **Identity DNA Detected**")
+            
+            if locked_json and not current_json:
+                 st.caption("🔒 **LOCKED IDENTITY ACTIVE:** You can edit the locked DNA below.")
+                 data_to_show = locked_json
+            else:
+                 st.caption("👇 **EDITABLE DNA:** You can tweak the measurements below before locking.")
+                 data_to_show = current_json
+            
+            # Convert JSON to string for editing
+            # Use session state to persist edits if available, else use data_to_show
+            if 'temp_json_edit' not in st.session_state:
+                    st.session_state['temp_json_edit'] = json.dumps(data_to_show, indent=4)
+            
+            # Editable Text Area
+            edited_json_str = st.text_area(
+                "Master Identity JSON", 
+                value=st.session_state['temp_json_edit'],
+                height=300,
+                key="json_editor_area",
+                help="Modify values here (e.g. change eye color) then click LOCK."
+            )
+            
+            # Update temp state on change
+            st.session_state['temp_json_edit'] = edited_json_str
+            
+            col_lock, col_info = st.columns([1, 2])
+            with col_lock:
+                st.button(
+                    "🧬 LOCK EDITED DNA", 
+                    key="btn_save_identity", 
+                    type="primary", 
+                    help="CLICK TO LOCK this face/body as the Master Identity for all future generations.",
+                    on_click=lock_identity_callback
                 )
-                
-                # Update temp state on change
-                st.session_state['temp_json_edit'] = edited_json_str
-                
-                col_lock, col_info = st.columns([1, 2])
-                with col_lock:
-                    if st.button("🧬 LOCK EDITED DNA", key="btn_save_identity", type="primary", help="CLICK TO LOCK this face/body as the Master Identity for all future generations."):
-                        try:
-                            edited_json = json.loads(edited_json_str)
-                            st.session_state['master_identity'] = edited_json
-                            st.toast("🧬 DNA LOCKED! You can now generate consistent characters.", icon="🔒")
-                            st.rerun()
-                        except json.JSONDecodeError:
-                            st.error("❌ Invalid JSON! Please check your syntax.")
-                
-                with col_info:
-                    st.info("👆 **Click to FREEZE this character.**")
-            st.divider()
-        # -------------------------------------
+            
+            with col_info:
+                st.info("👆 **Click to FREEZE this character.**")
+        st.divider()
+    # -------------------------------------
 
-        # Display parsed prompts
-        if parsed['prompts']:
-            st.markdown("### 📋 **COPY-READY PROMPTS**")
-            st.caption("💡 Final prompts are shown first (expanded). Intermediate analysis is below (collapsed).")
+    # Display parsed prompts
+    if parsed['prompts']:
+        st.markdown("### 📋 **COPY-READY PROMPTS**")
+        st.caption("💡 Final prompts are shown first (expanded). Intermediate analysis is below (collapsed).")
+        
+        # Separate prompts into final and intermediate
+        final_prompts = []
+        intermediate_prompts = []
+        
+        for i, (title, content) in enumerate(parsed['prompts']):
+            title_lower = title.lower()
+            is_final = any(x in title_lower for x in ['unified', 'final', 'reproduction', 'prompt', 'look', 'variant'])
+            is_intermediate = any(x in title_lower for x in ['logic', 'reasoning', 'analysis', 'layer', 'json'])
             
-            # Separate prompts into final and intermediate
-            final_prompts = []
-            intermediate_prompts = []
+            if is_final or (not is_intermediate):
+                final_prompts.append((i, title, content, True))
+            else:
+                intermediate_prompts.append((i, title, content, False))
+        
+        # Display final prompts first, then intermediate
+        all_ordered_prompts = final_prompts + intermediate_prompts
+        
+        if len(parsed['prompts']) <= 2:
+            all_ordered_prompts = [(i, t, c, True) for i, t, c, _ in all_ordered_prompts]
+        
+        for i, title, content, should_expand in all_ordered_prompts:
+            # SPECIAL DISPLAY FOR ALT_POV (SMART TABS)
+            if analysis_mode == 'alt_pov' and "LOOK 1:" in content:
+                with st.expander(f"**{title} (28 LOOKS - SMART VIEW)**", expanded=should_expand):
+                    st.info("✨ 28 Looks Detected - Organized by Mood")
+                    
+                    # Split content into Intro (JSON) and Looks
+                    parts = content.split("**LOOK 1:")
+                    intro = parts[0]
+                    looks_content = "**LOOK 1:" + parts[1] if len(parts) > 1 else content
+                    
+                    # Display Intro/JSON first
+                    with st.expander("🧬 Biometric Data & Intro", expanded=False):
+                        st.code(intro, language="markdown")
+
+                    # Create Tabs
+                    tab_dark, tab_tech, tab_color, tab_light, tab_bonus, tab_fetish = st.tabs([
+                        "🌑 DARK (1-5)", 
+                        "🔌 TECH (6-10)", 
+                        "🌈 COLOR (11-15)", 
+                        "✨ LIGHT (16-20)",
+                        "🔥 BONUS (21-22)",
+                        "💋 FETISH (23-28)"
+                    ])
+                    
+                    # Helper to extract look content
+                    import re
+                    def get_look(text, num):
+                        pattern = f"\\*\\*LOOK {num}:(.*?)(?=\\*\\*LOOK {num+1}:|$)"
+                        match = re.search(pattern, text, re.DOTALL)
+                        return f"**LOOK {num}:{match.group(1)}" if match else ""
+
+                    # Populate Tabs
+                    with tab_dark:
+                        for k in range(1, 6):
+                            lk = get_look(looks_content, k)
+                            if lk: 
+                                st.text_area(f"edit_{i}_{k}", value=lk.strip(), height=150, label_visibility="collapsed")
+                                st.code(lk.strip(), language="markdown")
+                    
+                    with tab_tech:
+                        for k in range(6, 11):
+                            lk = get_look(looks_content, k)
+                            if lk: 
+                                st.text_area(f"edit_{i}_{k}", value=lk.strip(), height=150, label_visibility="collapsed")
+                                st.code(lk.strip(), language="markdown")
+                            
+                    with tab_color:
+                        for k in range(11, 16):
+                            lk = get_look(looks_content, k)
+                            if lk: 
+                                st.text_area(f"edit_{i}_{k}", value=lk.strip(), height=150, label_visibility="collapsed")
+                                st.code(lk.strip(), language="markdown")
+                            
+                    with tab_light:
+                        for k in range(16, 21):
+                            lk = get_look(looks_content, k)
+                            if lk: 
+                                st.text_area(f"edit_{i}_{k}", value=lk.strip(), height=150, label_visibility="collapsed")
+                                st.code(lk.strip(), language="markdown")
+                    
+                    with tab_bonus:
+                        for k in range(21, 23):
+                            lk = get_look(looks_content, k)
+                            if lk: 
+                                st.text_area(f"edit_{i}_{k}", value=lk.strip(), height=150, label_visibility="collapsed")
+                                st.code(lk.strip(), language="markdown")
+                    
+                    with tab_fetish:
+                        for k in range(23, 29):
+                            lk = get_look(looks_content, k)
+                            if lk: 
+                                st.text_area(f"edit_{i}_{k}", value=lk.strip(), height=150, label_visibility="collapsed")
+                                st.code(lk.strip(), language="markdown")
+
+                    # Full Text Fallback (hidden by default)
+                    with st.expander("📜 View Full Raw Output", expanded=False):
+                        st.code(content, language="markdown")
             
-            for i, (title, content) in enumerate(parsed['prompts']):
-                title_lower = title.lower()
-                is_final = any(x in title_lower for x in ['unified', 'final', 'reproduction', 'prompt', 'look', 'variant'])
-                is_intermediate = any(x in title_lower for x in ['logic', 'reasoning', 'analysis', 'layer', 'json'])
-                
-                if is_final or (not is_intermediate):
-                    final_prompts.append((i, title, content, True))
-                else:
-                    intermediate_prompts.append((i, title, content, False))
-            
-            # Display final prompts first, then intermediate
-            all_ordered_prompts = final_prompts + intermediate_prompts
-            
-            if len(parsed['prompts']) <= 2:
-                all_ordered_prompts = [(i, t, c, True) for i, t, c, _ in all_ordered_prompts]
-            
-            for i, title, content, should_expand in all_ordered_prompts:
+            # STANDARD DISPLAY
+            else:
                 with st.expander(f"**{title}**", expanded=should_expand):
                     st.code(content, language="markdown")
+                
+                # Info and download button
+                col1, col2 = st.columns([2, 1])
+                with col1:
+                    st.caption(f"✨ {len(content)} characters")
+                with col2:
+                    import datetime
+                    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    file_timestamp = datetime.datetime.now().strftime("%d%m%Y_%H%M%S")
                     
-                    # Info and download button
-                    col1, col2 = st.columns([2, 1])
-                    with col1:
-                        st.caption(f"✨ {len(content)} characters")
-                    with col2:
-                        import datetime
-                        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                        file_timestamp = datetime.datetime.now().strftime("%d%m%Y_%H%M%S")
-                        
-                        title_words = title.split()[:5]
-                        short_title = "_".join(title_words).lower()
-                        short_title = "".join(c if c.isalnum() or c == "_" else "" for c in short_title)
-                        filename = f"{short_title}_{file_timestamp}.txt"
-                        
-                        metadata_footer = f"""
+                    title_words = title.split()[:5]
+                    short_title = "_".join(title_words).lower()
+                    short_title = "".join(c if c.isalnum() or c == "_" else "" for c in short_title)
+                    filename = f"{short_title}_{file_timestamp}.txt"
+                    
+                    metadata_footer = f"""
 # ========================================
 # GENERATION INFO
 # ========================================
 # Generated: {timestamp}
 # Analysis Mode: {analysis_mode}
 """
-                        if selected_style:
-                            metadata_footer += f"# Style: {selected_style}\n"
-                        
-                        metadata_footer += "# ========================================\n"
-                        
-                        st.download_button(
-                            label="💾 Download",
-                            data=content + metadata_footer,
-                            file_name=filename,
-                            mime="text/plain",
-                            key=f"dl_btn_{i}"
-                        )
+                    if selected_style:
+                        metadata_footer += f"# Style: {selected_style}\n"
                     
-                    # --- DATASET SAVING UI ---
-                    st.divider()
-                    st.caption("🧠 **Add to Training Dataset**")
-                    c_rate, c_comment, c_btn = st.columns([3, 2, 1])
+                    metadata_footer += "# ========================================\n"
                     
-                    with c_rate:
-                        rating = st.feedback("stars", key=f"rating_{i}")
-                    
-                    with c_comment:
-                        comment = st.text_input("Comment", placeholder="Optional...", key=f"comment_{i}", label_visibility="collapsed")
-                    
-                    with c_btn:
-                        if st.button("💾", key=f"save_db_{i}", use_container_width=True):
-                            ref_image = "unknown"
-                            if selected_items and isinstance(selected_items[0], str):
-                                ref_image = os.path.basename(selected_items[0])
-                            elif 'video_frames' in st.session_state:
-                                ref_image = "video_frame_extraction"
-                                
-                            final_rating = (rating + 1) if rating is not None else 0
+                    st.download_button(
+                        label="💾 Download",
+                        data=content + metadata_footer,
+                        file_name=filename,
+                        mime="text/plain",
+                        key=f"dl_btn_{i}"
+                    )
+                
+                # --- DATASET SAVING UI ---
+                st.divider()
+                st.caption("🧠 **Add to Training Dataset**")
+                c_rate, c_comment, c_btn = st.columns([3, 2, 1])
+                
+                with c_rate:
+                    rating = st.feedback("stars", key=f"rating_{i}")
+                
+                with c_comment:
+                    comment = st.text_input("Comment", placeholder="Optional...", key=f"comment_{i}", label_visibility="collapsed")
+                
+                with c_btn:
+                    if st.button("💾", key=f"save_db_{i}", use_container_width=True):
+                        ref_image = "unknown"
+                        if selected_items and isinstance(selected_items[0], str):
+                            ref_image = os.path.basename(selected_items[0])
+                        elif 'video_frames' in st.session_state:
+                            ref_image = "video_frame_extraction"
                             
-                            db.save_analysis(
-                                image_name=ref_image,
-                                mode=analysis_mode,
-                                style=selected_style,
-                                model=selected_model,
-                                prompt_content=content,
-                                rating=final_rating,
-                                comment=comment
-                            )
-                            st.toast(f"✅ Saved with {final_rating} stars!", icon="💾")
+                        final_rating = (rating + 1) if rating is not None else 0
+                        
+                        db.save_analysis(
+                            image_name=ref_image,
+                            mode=analysis_mode,
+                            style=selected_style,
+                            model=selected_model,
+                            prompt_content=content,
+                            rating=final_rating,
+                            comment=comment
+                        )
+                        st.toast(f"✅ Saved with {final_rating} stars!", icon="💾")
 
-        # Display JSON data for biometric modes
-        if parsed['json_data']:
-            import datetime
-            ts = datetime.datetime.now().strftime("%d%m%Y%H%M%S")
-            filename = f"biome_ID_{ts}.json"
-            
-            if isinstance(parsed['json_data'], dict):
-                parsed['json_data']["id"] = f"ID_{ts}"
-            
-            st.divider()
-            st.subheader("🧬 Biometric Data Extracted")
-            
-            with st.expander("🔍 Inspect Raw JSON Data", expanded=False):
-                st.json(parsed['json_data'])
-            
-            st.download_button(
-                label=f"📥 Download {filename}",
-                data=json.dumps(parsed['json_data'], indent=4),
-                file_name=filename,
-                mime="application/json",
-                type="primary"
-            )
-        elif analysis_mode in ["ultimate_biome_fashion_icon", "fetish_mode_shorts", "biome_ultra_detailed"]:
-            st.warning("⚠️ No JSON block found in the response.")
+    # Fallback: If no prompts parsed but we have text, show raw text
+    if not parsed['prompts'] and res.get('full_response'):
+        st.warning("⚠️ Could not parse structured prompts (Format mismatch). Showing raw output:")
+        st.text_area("Raw Output", res['full_response'], height=600)
+
+    # Display JSON data for biometric modes
+    if parsed['json_data']:
+        import datetime
+        ts = datetime.datetime.now().strftime("%d%m%Y%H%M%S")
+        filename = f"biome_ID_{ts}.json"
+        
+        if isinstance(parsed['json_data'], dict):
+            parsed['json_data']["id"] = f"ID_{ts}"
+        
+        st.divider()
+        st.subheader("🧬 Biometric Data Extracted")
+        
+        with st.expander("🔍 Inspect Raw JSON Data", expanded=False):
+            st.json(parsed['json_data'])
+        
+        st.download_button(
+            label=f"📥 Download {filename}",
+            data=json.dumps(parsed['json_data'], indent=4),
+            file_name=filename,
+            mime="application/json",
+            type="primary"
+        )
+    elif analysis_mode in ["ultimate_biome_fashion_icon", "fetish_mode_shorts", "biome_ultra_detailed"]:
+        st.warning("⚠️ No JSON block found in the response.")
 
     # Display last analysis results (persists across reruns)
     if 'last_analysis' in st.session_state:

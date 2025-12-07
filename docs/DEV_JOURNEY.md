@@ -95,4 +95,34 @@ C'est instantané (pas d'entraînement), gratuit, et flexible (on peut éditer l
 
 ---
 
+
+## 📅 Session : Persistence & Stabilité (07/12/2025)
+
+### 1. La Persistance d'État (`st.session_state`)
+**Le Problème :**
+Quand on cliquait sur "LOCK", la page se rechargeait (`st.rerun()`) et tout disparaissait (le résultat de l'analyse, le bouton lock, etc.). C'est le comportement par défaut de Streamlit.
+
+**La Solution :**
+On a découplé l'analyse de l'affichage.
+1.  **Au clic sur "Analyze"** : On fait le travail et on *sauvegarde* tout dans `st.session_state['current_result']`.
+2.  **Au chargement de la page** : On vérifie si `current_result` existe. Si oui, on l'affiche.
+Cela permet à l'affichage de survivre aux rechargements de page déclenchés par d'autres boutons (comme le Lock).
+
+### 2. L'Indentation Python
+**La Leçon Douloureuse :**
+Python est impitoyable avec les espaces. Un mélange de blocs copiés-collés à différents niveaux d'imbrication (dans des `if`, des `try`, des `with`) a causé des `IndentationError` en cascade.
+**Règle d'or :** Toujours vérifier l'alignement vertical strict des blocs logiques.
+
+### 3. Interception de Flux (Streaming)
+**Le Besoin :**
+L'utilisateur voulait voir et verrouiller le JSON *pendant* que l'IA continuait d'écrire le reste du texte, sans attendre la fin.
+
+**La Technique (Évolution) :**
+Initialement, on utilisait des Regex complexes. Ça échouait souvent.
+**Solution Finale :** "Brute Force". On cherche simplement la première `{` et la dernière `}` dans le flux. On essaie de parser. Si ça marche, on affiche.
+C'est beaucoup plus robuste et rapide que d'essayer de deviner le format exact du Markdown.
+Cela crée une interface ultra-réactive où le contrôle (Lock) apparaît avant même que l'analyse soit finie.
+
+---
+
 *À suivre...*

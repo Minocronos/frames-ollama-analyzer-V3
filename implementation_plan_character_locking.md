@@ -27,17 +27,17 @@ Nous allons introduire un état persistant dans l'application (`st.session_state
 ## 📝 Étapes d'Implémentation
 
 ### Étape 1 : Sauvegarde de l'Identité
-*   [ ] Dans `app.py`, capturer la sortie de l'analyse biométrique.
-*   [ ] Parser ou extraire le bloc JSON (ou le texte descriptif complet) de la réponse de l'IA.
-*   [ ] Stocker ce bloc dans `st.session_state`.
+*   [x] Dans `app.py`, capturer la sortie de l'analyse biométrique.
+*   [x] Parser ou extraire le bloc JSON (ou le texte descriptif complet) de la réponse de l'IA.
+*   [x] Stocker ce bloc dans `st.session_state`.
 
 ### Étape 2 : Interface Utilisateur
-*   [ ] Ajouter le bouton de sauvegarde.
-*   [ ] Ajouter l'indicateur d'état dans la sidebar.
+*   [x] Ajouter le bouton de sauvegarde.
+*   [x] Ajouter l'indicateur d'état dans la sidebar.
 
 ### Étape 3 : Injection dans les Prompts
-*   [ ] Modifier la fonction qui prépare le prompt final.
-*   [ ] Créer un template d'injection :
+*   [x] Modifier la fonction qui prépare le prompt final.
+*   [x] Créer un template d'injection :
     ```text
     ⚠️ CRITICAL INSTRUCTION: CHARACTER CONSISTENCY
     You must strictly adhere to the following BIOMETRIC DNA for the subject. 
