@@ -13,6 +13,11 @@ import ollama
 # Initialize Database
 db = DatabaseManager()
 
+# --- SESSION STATE INITIALIZATION ---
+if 'master_identity' not in st.session_state:
+    st.session_state['master_identity'] = None
+# ------------------------------------
+
 # Page Config (Must be first)
 st.set_page_config(
     page_title="Artidicia - Artificial Serendipity",
@@ -986,29 +991,41 @@ IF YOU IGNORE THIS INSTRUCTION, THE OUTPUT WILL BE REJECTED.
                     }
                     
                     # --- DEBUG: JSON DETECTION ---
-                    with st.expander("🔍 Debug JSON Detection", expanded=True):
-                        st.write(f"Mode: {analysis_mode}")
-                        st.write(f"JSON Found: {bool(parsed.get('json_data'))}")
-                        if not parsed.get('json_data'):
-                            st.warning("No JSON detected in response. Check if the model followed the template.")
-                            st.code(full_response[:500] + "...", language="markdown") # Show start of response
+                    # Debug block removed
                     # -----------------------------
 
-                    # --- CHARACTER LOCKING SAVE BUTTON ---
+                    # --- CHARACTER LOCKING SAVE BUTTON (EDITABLE) ---
                     if parsed.get('json_data'):
                         st.divider()
-                        # Create a distinctive container for the Lock action
                         with st.container():
                             st.markdown("### 🧬 **Identity DNA Detected**")
+                            st.caption("👇 **EDITABLE DNA:** You can tweak the measurements below before locking.")
+                            
+                            # Convert JSON to string for editing
+                            json_str = json.dumps(parsed['json_data'], indent=2)
+                            
+                            # Editable Text Area
+                            edited_json_str = st.text_area(
+                                "Master Identity JSON", 
+                                value=json_str, 
+                                height=300,
+                                help="Modify values here (e.g. change eye color) then click LOCK."
+                            )
+                            
                             col_lock, col_info = st.columns([1, 2])
                             with col_lock:
-                                # Distinctive label and help text
-                                if st.button("🧬 LOCK MASTER DNA", key="btn_save_identity", type="primary", help="CLICK TO LOCK this face/body as the Master Identity for all future generations."):
-                                    st.session_state['master_identity'] = parsed['json_data']
-                                    st.toast("🧬 DNA LOCKED! You can now generate consistent characters.", icon="🔒")
-                                    st.rerun()
+                                if st.button("🧬 LOCK EDITED DNA", key="btn_save_identity", type="primary", help="CLICK TO LOCK this face/body as the Master Identity for all future generations."):
+                                    try:
+                                        # Parse the edited string back to JSON
+                                        edited_json = json.loads(edited_json_str)
+                                        st.session_state['master_identity'] = edited_json
+                                        st.toast("🧬 DNA LOCKED! You can now generate consistent characters.", icon="🔒")
+                                        st.rerun()
+                                    except json.JSONDecodeError:
+                                        st.error("❌ Invalid JSON! Please check your syntax (commas, quotes).")
+                            
                             with col_info:
-                                st.caption("👆 **Click this to FREEZE this character's identity.**\nFuture prompts will force the AI to use these exact measurements.")
+                                st.info("👆 **Click to FREEZE this character.**\nAny changes made in the text box above will be saved as the Master Truth.")
                         st.divider()
                     # -------------------------------------
                     
