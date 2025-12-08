@@ -10,6 +10,7 @@
 | **Qwen Weighted Fusion** | 🎨 Multi | 2+ | ✅ Total | Long (3 prompts) | Fusion complexe et précise |
 | **Biome Ultra Detailed** | 🖼️ Single | 1 | ❌ Aucun | Très long (JSON + 6 prompts) | Analyse biométrique complète |
 | **Ultimate Biome Fashion Icon** | 🖼️ Single | 1 | ❌ Aucun | Long (JSON + 3 looks) | Mode/Fashion avec biométrie |
+| **Biometric Lips & Skin Precision** ⭐ | 🖼️ Single | 1 | ❌ Aucun | Long (JSON enrichi + rapport) | Couleurs peau/lèvres ultra-précises |
 | **Fetish Mode Shorts** | 🖼️ Single | 1 | ❌ Aucun | Long (JSON + 6 prompts courts) | Érotique/Mode provocante |
 
 ---
@@ -122,6 +123,37 @@
 - Tu travailles dans la mode
 - Tu veux des variations éditoriales sophistiquées
 - Tu as besoin de références biométriques + créatives
+
+---
+
+### Biometric Lips & Skin Precision ⭐ NEW
+
+**Description :** Analyse biométrique ULTRA-PRÉCISE focalisée sur la couleur de peau et la morphologie des lèvres.
+
+**Sortie :**
+- 📋 JSON biométrique enrichi avec :
+  - **Skin** : Couleur hex, sous-tons (warm/cool/neutral), zones faciales (front, joues, menton, sous-yeux)
+  - **Lips** : Couleur hex (lèvre sup/inf), arc de Cupidon (profondeur, forme), commissures, texture, asymétrie, philtrum
+- 📊 Rapport technique détaillé avec mesures précises
+- 🎨 Fragments de prompts optimisés (skin + lips)
+
+**✅ Points forts :**
+- **Précision extrême** sur peau et lèvres (hex colors, sous-tons, zones)
+- Détection maquillage vs couleur naturelle
+- Analyse arc de Cupidon, commissures, philtrum
+- Parfait pour makeup artists, dermatologie, character design
+- Compatible avec le système de verrouillage d'identité
+
+**❌ Limites :**
+- Spécialisé (focus sur 2 aspects uniquement)
+- Sortie technique (moins créative que les modes fashion)
+- Uniquement 1 image
+
+**Quand l'utiliser :**
+- Tu as besoin de couleurs de peau/lèvres **exactes** (hex codes)
+- Tu travailles en makeup, cosmétiques, dermatologie
+- Les modes biométriques classiques manquent de précision sur ces aspects
+- Tu veux verrouiller une identité avec couleurs ultra-précises
 
 ---
 

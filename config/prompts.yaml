@@ -505,6 +505,260 @@ analysis_modes:
       **Recommendation**: Start with Variant B (Hybrid) for best balance. Use Variant A if results are inconsistent.
 
 
+  biometric_lips_skin_precision:
+    description: "[1 Image] LIPS & SKIN PRECISION. Ultra-detailed extraction of skin color (undertones, hex, zones) and lip morphology (color, cupid's bow, texture, asymmetry)."
+    template: |
+      Perform an ULTRA-PRECISE biometric analysis with extreme focus on **SKIN COLOR** and **LIP MORPHOLOGY**.
+      
+      ⚠️ **CRITICAL - OUTPUT ORDER:**
+      1. **YOU MUST OUTPUT THE JSON BLOCK FIRST** (below).
+      2. ONLY AFTER the JSON is complete, proceed to the technical report.
+      
+      ### PART 1: ENHANCED BIOMETRIC CANVAS (JSON)
+      
+      Extract the morpho-data with MAXIMUM PRECISION on skin and lips.
+      
+      ```json
+      {
+        "id": "ID_PLACEHOLDER",
+        "gender": "female or male",
+        "age_est": 25,
+        "hair": {
+          "color": "color name",
+          "style": "style description",
+          "length": "short/medium/long",
+          "description": "Detailed description of texture, cut, and behavior"
+        },
+        "face": {
+          "shape": "oval/square/heart/etc",
+          "description": "Comprehensive description of facial structure, cheekbones, and jawline",
+          "symmetry_percent": 95,
+          "eyes": { 
+            "color": "iris color",
+            "shape": "almond/round/hooded",
+            "description": "Detailed description of iris pattern, eyelids, lashes, and expression",
+            "intercanthal_mm": 35
+          },
+          "nose": { 
+            "nasofrontal_angle_deg": 125,
+            "description": "Detailed description of bridge, tip, nostrils, and profile"
+          },
+          "mouth": {
+            "lips": {
+              "natural_color": {
+                "upper": "natural color description (e.g., soft pink with mauve undertones)",
+                "lower": "natural color description (e.g., slightly darker rose)",
+                "hex_estimate_upper": "#C87E8A",
+                "hex_estimate_lower": "#B86F7D",
+                "description": "Detailed color description including pigmentation variations, natural vs makeup"
+              },
+              "shape": {
+                "cupids_bow": "pronounced/subtle/flat",
+                "cupids_bow_depth_mm": 3,
+                "commissures": "upturned/neutral/downturned",
+                "commissures_angle_deg": 5,
+                "overall_shape": "full/thin/bow-shaped/heart-shaped/asymmetric"
+              },
+              "dimensions": {
+                "upper_lip_mm": 10,
+                "lower_lip_mm": 12,
+                "ratio_upper_lower": "1:1.2",
+                "width_mm": 50,
+                "width_to_nose_ratio": "1:1.5"
+              },
+              "texture": {
+                "surface": "smooth/slightly lined/dry/chapped/glossy",
+                "vertical_lines": "none/subtle/pronounced",
+                "description": "Detailed texture description (moisture, fine lines, etc.)"
+              },
+              "symmetry": {
+                "left_right_percent": 92,
+                "asymmetry_notes": "Description of any asymmetry (e.g., left side slightly fuller)"
+              }
+            },
+            "philtrum": {
+              "depth": "shallow/medium/deep",
+              "length_mm": 15,
+              "width_mm": 10,
+              "description": "Detailed philtrum description (ridges, definition)"
+            }
+          },
+          "mandibular_angle_deg": 115
+        },
+        "body": {
+          "somatotype": "ectomorphic/mesomorphic/endomorphic",
+          "description": "Detailed description of frame, shoulders, waist, hips, and limbs",
+          "body_fat_percent": 18,
+          "muscle_def": 5,
+          "head_to_body_ratio": "1:7.5",
+          "shoulder_to_hip_ratio": "1:0.95"
+        },
+        "skin": {
+          "fitzpatrick": 2,
+          "base_color": {
+            "primary": "warm beige/cool ivory/olive tan/deep bronze/etc",
+            "hex_estimate": "#D4A574",
+            "undertone": "warm/cool/neutral/olive",
+            "description": "Detailed color description with nuances and natural variations"
+          },
+          "color_zones": {
+            "forehead": "color description (e.g., slightly lighter, even tone)",
+            "cheeks": "color description (e.g., natural blush, redness, hyperpigmentation)",
+            "chin": "color description",
+            "under_eyes": "color description (e.g., slight darkness, purple undertones)",
+            "nose": "color description (e.g., redness on tip, pores visible)"
+          },
+          "texture": "fine/medium/coarse",
+          "description": "Detailed description of pores, complexion, freckles, scars, and micro-texture"
+        }
+      }
+      ```
+      
+      ---
+      
+      ### PART 2: PRECISION TECHNICAL REPORT
+      
+      ## 1. SKIN COLOR ANALYSIS (Ultra-Detailed)
+      
+      ### 1.1 Base Color Profile
+      - **Primary Color**: [Descriptive name with nuances]
+      - **Hex Estimate**: #XXXXXX (closest approximation)
+      - **Undertone Classification**: 
+        * Warm (golden, peachy, yellow base): __%
+        * Cool (pink, red, blue base): __%
+        * Neutral (balanced): __%
+        * Olive (green-yellow base): __%
+        * **Dominant**: [___]
+      - **Fitzpatrick Scale**: Type __ (1-6)
+      
+      ### 1.2 Regional Color Mapping
+      Using a facial zone analysis:
+      - **Forehead**: [Color description + hex estimate]
+      - **Cheeks**: [Color description + variations (blush, redness, hyperpigmentation)]
+      - **Nose**: [Color description + texture notes]
+      - **Chin/Jaw**: [Color description]
+      - **Under-Eyes**: [Color description + darkness level]
+      - **Lips Surround**: [Color description + definition]
+      
+      ### 1.3 Color Variations & Imperfections
+      - **Hyperpigmentation**: [Location + severity]
+      - **Redness/Rosacea**: [Location + intensity]
+      - **Freckles/Moles**: [Color + distribution]
+      - **Scars/Marks**: [Color + location]
+      - **Overall Uniformity**: __%
+      
+      ---
+      
+      ## 2. LIP MORPHOLOGY ANALYSIS (Ultra-Detailed)
+      
+      ### 2.1 Natural Lip Color (CRITICAL)
+      - **Upper Lip Color**: [Precise description]
+        * Hex Estimate: #XXXXXX
+        * Undertone: [pink/mauve/coral/brown/etc]
+      - **Lower Lip Color**: [Precise description]
+        * Hex Estimate: #XXXXXX
+        * Undertone: [usually slightly darker]
+      - **Color Gradient**: [Description of color transition from center to edges]
+      - **Lip Line Definition**: [Sharp/Soft/Blurred]
+      - **Makeup Detection**: [None/Lipstick/Gloss/Stain] - If present, describe natural color underneath if visible
+      
+      ### 2.2 Cupid's Bow Analysis
+      - **Shape**: [Pronounced/Subtle/Flat/Asymmetric]
+      - **Depth**: __mm (vertical dip from peaks to valley)
+      - **Peak Width**: __mm (distance between peaks)
+      - **Peak Sharpness**: [Sharp/Rounded/Undefined]
+      - **Symmetry**: Left peak vs Right peak: __%
+      
+      ### 2.3 Lip Dimensions & Proportions
+      - **Upper Lip Thickness**: __mm (at center)
+      - **Lower Lip Thickness**: __mm (at center)
+      - **Ratio Upper:Lower**: __:__ (ideal: 1:1.6)
+      - **Total Lip Width**: __mm
+      - **Width to Nose Width Ratio**: __:__ (ideal: 1:1.5)
+      - **Width to Face Width Ratio**: __%
+      
+      ### 2.4 Commissures (Mouth Corners)
+      - **Angle**: __° (positive = upturned, negative = downturned)
+      - **Position**: [Upturned/Neutral/Downturned]
+      - **Depth**: [Shallow/Medium/Deep crease]
+      - **Symmetry**: Left vs Right: __%
+      
+      ### 2.5 Lip Texture & Surface
+      - **Surface Quality**: [Smooth/Slightly Lined/Dry/Chapped/Glossy]
+      - **Vertical Lines**: [None/Subtle/Pronounced]
+      - **Moisture Level**: [Dry/Normal/Moist/Glossy]
+      - **Texture Score**: __/10 (10 = perfectly smooth)
+      
+      ### 2.6 Philtrum Analysis
+      - **Depth**: [Shallow/Medium/Deep]
+      - **Length**: __mm (nose base to cupid's bow)
+      - **Width**: __mm (at base)
+      - **Ridge Definition**: [Subtle/Pronounced/Absent]
+      - **Symmetry**: __%
+      
+      ### 2.7 Overall Lip Symmetry
+      - **Left-Right Symmetry**: __%
+      - **Asymmetry Notes**: [Detailed description of any asymmetry]
+      - **Fullness Balance**: [Even/Upper Fuller/Lower Fuller]
+      
+      ---
+      
+      ## 3. SYNTHESIS & PROMPT GENERATION
+      
+      ### 3.1 Skin Color Prompt Fragment
+      ```
+      skin: [primary color] with [undertone] undertones, hex #XXXXXX,
+      [regional variations if significant],
+      [texture description],
+      [imperfections with locations]
+      ```
+      
+      ### 3.2 Lips Prompt Fragment
+      ```
+      lips: natural [upper color] upper lip (hex #XXXXXX) and [lower color] lower lip (hex #XXXXXX),
+      [cupid's bow description], [commissures description],
+      [texture description], [symmetry notes],
+      dimensions: [X]mm upper / [X]mm lower, ratio [X:X],
+      [overall shape description]
+      ```
+      
+      ### 3.3 Complete Hyper-Realistic Prompt
+      ```
+      [SUBJECT DESCRIPTION]:
+      [Gender], [age], [face shape] face,
+      
+      [SKIN (ULTRA-PRECISE)]:
+      skin: [base color] (hex #XXXXXX) with [undertone] undertones,
+      [regional color variations],
+      texture: [description],
+      [distinctive marks with colors],
+      
+      [LIPS (ULTRA-PRECISE)]:
+      lips: natural [upper lip color] upper lip (hex #XXXXXX), [lower lip color] lower lip (hex #XXXXXX),
+      cupid's bow: [shape] with [X]mm depth,
+      commissures: [angle description],
+      texture: [surface quality],
+      dimensions: [X]mm upper, [X]mm lower, [X]mm width,
+      symmetry: [X]%,
+      
+      [OTHER FACIAL FEATURES]:
+      [eyes, nose, etc. - standard biometric data],
+      
+      [PHOTOGRAPHY SPECS]:
+      hyper-realistic portrait, 8K resolution, professional lighting,
+      accurate color reproduction, true-to-life skin tones,
+      natural lip color without enhancement
+      ```
+      
+      ---
+      
+      **CRITICAL INSTRUCTIONS FOR COLOR ACCURACY:**
+      1. **NEVER** guess colors. Analyze the actual visible hues.
+      2. **DISTINGUISH** between natural color and makeup/lighting effects.
+      3. **USE** nuanced descriptions (e.g., "dusty rose with mauve undertones" not just "pink").
+      4. **PROVIDE** hex estimates as close as possible to perceived color.
+      5. **NOTE** regional variations (lips are rarely uniform in color).
+      6. **DESCRIBE** undertones separately from surface color.
 
 
 
