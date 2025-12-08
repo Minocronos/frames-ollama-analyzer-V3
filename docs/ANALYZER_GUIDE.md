@@ -11,6 +11,7 @@
 | **Biome Ultra Detailed** | 🖼️ Single | 1 | ❌ Aucun | Très long (JSON + 6 prompts) | Analyse biométrique complète |
 | **Ultimate Biome Fashion Icon** | 🖼️ Single | 1 | ❌ Aucun | Long (JSON + 3 looks) | Mode/Fashion avec biométrie |
 | **Biometric Lips & Skin Precision** ⭐ | 🖼️ Single | 1 | ❌ Aucun | Long (JSON enrichi + rapport) | Couleurs peau/lèvres ultra-précises |
+| **Biometric Compact & Weighted** ⭐⚠️ | 🖼️ Single | 1 | ❌ Aucun | Court (JSON + prompt < 200 mots) | **ANTI SAME FACE SYNDROME** |
 | **Fetish Mode Shorts** | 🖼️ Single | 1 | ❌ Aucun | Long (JSON + 6 prompts courts) | Érotique/Mode provocante |
 
 ---
@@ -156,6 +157,47 @@
 - Tu veux verrouiller une identité avec couleurs ultra-précises
 
 ---
+
+### Biometric Compact & Weighted ⭐ NEW - ANTI SAME FACE
+
+**Description :** Prompts ultra-courts (< 200 mots) avec poids visuels (1.1-1.5) pour Stable Diffusion/Flux. **Résout le "same face syndrome"**.
+
+**Sortie :**
+- 📋 JSON biométrique (référence)
+- 🎯 **COMPACT WEIGHTED PROMPT** (< 200 mots avec poids)
+  - Format: `(feature:1.5)` pour features très distinctives
+  - Ordre stratégique: features uniques en premier
+- ❌ **NEGATIVE PROMPT** (critique pour la diversité)
+- 📊 **WEIGHT EXPLANATION** (rationale des poids)
+- 🔄 **FORMATS ALTERNATIFS** (natural language, keyword list)
+
+**Système de Poids :**
+- **1.5** : TRÈS distinctif (asymétries, features rares)
+- **1.4** : Hautement distinctif (proportions inhabituelles, marques)
+- **1.3** : Distinctif (couleurs rares, formes uniques)
+- **1.2** : Notable (sous-tons spécifiques, texture)
+- **1.1** : Standard mais important (âge, structure de base)
+
+**✅ Points forts :**
+- **RÉSOUT LE SAME FACE SYNDROME** (problème #1 des générateurs)
+- Prompts ultra-courts = meilleure attention du modèle
+- Poids visuels forcent les features uniques
+- Negative prompts inclus automatiquement
+- Focus sur asymétries et traits distinctifs
+- Compatible Stable Diffusion, Flux, ComfyUI
+- Formats alternatifs pour tous les modèles
+
+**❌ Limites :**
+- Nécessite un modèle supportant les poids (ou utiliser format alternatif)
+- Moins de détails techniques que les modes longs
+- Uniquement 1 image
+
+**Quand l'utiliser :**
+- ⚠️ **TU AS LE PROBLÈME "TOUJOURS LE MÊME VISAGE"** ← USE THIS!
+- Tu génères avec Stable Diffusion, Flux, ComfyUI
+- Tu veux des visages vraiment distincts et mémorables
+- Les prompts longs ne donnent pas de bons résultats
+- Tu as besoin de negative prompts optimisés
 
 ### Fetish Mode Shorts
 

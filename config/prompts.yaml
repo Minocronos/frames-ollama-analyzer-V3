@@ -761,6 +761,222 @@ analysis_modes:
       6. **DESCRIBE** undertones separately from surface color.
 
 
+  biometric_compact_weighted:
+    description: "[1 Image] COMPACT & WEIGHTED. Ultra-short biometric prompt (< 200 words) with visual weights (1.1-1.5) for Stable Diffusion/Flux. Solves 'same face syndrome'."
+    template: |
+      Perform a strategic biometric analysis optimized for **MAXIMUM DISTINCTIVENESS** in image generation.
+      
+      **CRITICAL MISSION:** Prevent "same face syndrome" by creating COMPACT, WEIGHTED prompts.
+      
+      ⚠️ **OUTPUT ORDER:**
+      1. **JSON BLOCK FIRST** (standard biometric data for reference)
+      2. **COMPACT WEIGHTED PROMPT** (the main deliverable)
+      3. **NEGATIVE PROMPT** (critical for diversity)
+      4. **WEIGHT EXPLANATION** (rationale)
+      
+      ---
+      
+      ### PART 1: BIOMETRIC CANVAS (JSON) - REFERENCE ONLY
+      
+      Extract standard biometric data (same schema as other modes).
+      This is for reference and identity locking, NOT for the final prompt.
+      
+      ```json
+      {
+        "id": "ID_PLACEHOLDER",
+        "gender": "female or male",
+        "age_est": 25,
+        "distinctive_features": [
+          "Feature 1 that makes this face UNIQUE",
+          "Feature 2 that prevents generic face",
+          "Feature 3 that is uncommon"
+        ],
+        "hair": {
+          "color": "color name",
+          "style": "style description",
+          "length": "short/medium/long",
+          "description": "Detailed description"
+        },
+        "face": {
+          "shape": "oval/square/heart/etc",
+          "description": "Comprehensive description",
+          "symmetry_percent": 95,
+          "eyes": { 
+            "color": "NUANCED color (e.g., hazel with green flecks, NOT just 'blue')",
+            "shape": "almond/round/hooded",
+            "description": "Detailed description with unique patterns",
+            "intercanthal_mm": 35
+          },
+          "nose": { 
+            "nasofrontal_angle_deg": 125,
+            "description": "Detailed description"
+          },
+          "mouth": { 
+            "upper_lip_mm": 10,
+            "lower_lip_mm": 12,
+            "cupids_bow": "pronounced/subtle/flat",
+            "asymmetry": "Description of any asymmetry (CRITICAL for uniqueness)",
+            "description": "Detailed description"
+          },
+          "mandibular_angle_deg": 115
+        },
+        "body": {
+          "somatotype": "ectomorphic/mesomorphic/endomorphic",
+          "description": "Detailed description",
+          "body_fat_percent": 18,
+          "muscle_def": 5,
+          "head_to_body_ratio": "1:7.5",
+          "shoulder_to_hip_ratio": "1:0.95"
+        },
+        "skin": {
+          "fitzpatrick": 2,
+          "color_hex": "#D4A574",
+          "undertone": "warm/cool/neutral/olive",
+          "texture": "fine/medium/coarse",
+          "distinctive_marks": [
+            "Mole/freckle/scar with location (CRITICAL for uniqueness)"
+          ],
+          "description": "Detailed description"
+        }
+      }
+      ```
+      
+      ---
+      
+      ### PART 2: COMPACT WEIGHTED PROMPT ⭐ MAIN OUTPUT
+      
+      **INSTRUCTIONS FOR CREATING THE PROMPT:**
+      
+      1. **IDENTIFY DISTINCTIVE FEATURES** (3-5 features that make this face UNIQUE):
+         - Asymmetries (smile, eyes, lips)
+         - Unusual proportions (very full lips, wide-set eyes)
+         - Distinctive marks (moles, scars, freckle patterns)
+         - Uncommon colors (hazel with flecks, olive skin, auburn hair)
+         - Unique shapes (pronounced cupid's bow, hooded eyes)
+      
+      2. **ASSIGN WEIGHTS** (based on distinctiveness):
+         - **1.5** : VERY distinctive (asymmetries, rare features)
+         - **1.4** : Highly distinctive (unusual proportions, marks)
+         - **1.3** : Distinctive (uncommon colors, unique shapes)
+         - **1.2** : Notable (specific undertones, texture)
+         - **1.1** : Standard but important (age, basic structure)
+         - **1.0** : Baseline (common features)
+      
+      3. **ORDER STRATEGICALLY**:
+         - Start with gender + age (1.1)
+         - Then MOST distinctive features (1.5-1.4)
+         - Then important features (1.3-1.2)
+         - Then standard features (1.1-1.0)
+         - End with technical specs
+      
+      4. **KEEP IT SHORT** (< 200 words total):
+         - NO measurements in mm or degrees
+         - NO technical ratios
+         - ONLY visual descriptions
+         - Use hex codes for colors (compact)
+      
+      5. **USE NATURAL LANGUAGE WITH WEIGHTS**:
+         - Format: `(description:weight)`
+         - Example: `(asymmetric smile, left side higher:1.5)`
+      
+      ---
+      
+      ## 🎯 COMPACT WEIGHTED PROMPT
+      
+      **POSITIVE PROMPT (Stable Diffusion / Flux / ComfyUI):**
+      
+      ```
+      ([gender], [age] years old:1.1), ([MOST distinctive feature with specific details]:1.5), 
+      ([second most distinctive feature]:1.4), ([third distinctive feature]:1.4),
+      ([skin color] skin, hex #XXXXXX, [undertone] undertones:1.2), 
+      ([eye color with nuances] [eye shape] eyes:1.3), 
+      ([lip description], [cupid's bow detail]:1.3), 
+      ([distinctive mark with location]:1.4),
+      ([hair color] [hair texture] [hair style] hair:1.1),
+      [face shape] face, [body type] build,
+      photorealistic portrait, 8K resolution, natural lighting, 
+      accurate color reproduction, true-to-life skin tones, 
+      professional photography, sharp focus, detailed features
+      ```
+      
+      **NEGATIVE PROMPT (CRITICAL - DO NOT SKIP):**
+      
+      ```
+      generic face, average features, perfect symmetry, symmetrical face, 
+      airbrushed skin, instagram filter, beauty filter, same face syndrome, 
+      model face template, cookie-cutter beauty, homogenized features, 
+      oversaturated colors, artificial lighting, plastic skin, porcelain skin, 
+      doll-like, flawless skin, perfect skin, no imperfections,
+      stock photo face, AI-generated generic face, boring features,
+      lack of character, no distinctive traits, forgettable face
+      ```
+      
+      ---
+      
+      ## 📊 WEIGHT EXPLANATION & RATIONALE
+      
+      Explain why each weight was assigned:
+      
+      - **Weight 1.5** : [Feature name] - [Why it's VERY distinctive and prevents same face syndrome]
+      - **Weight 1.4** : [Feature name] - [Why it's highly distinctive]
+      - **Weight 1.3** : [Feature name] - [Why it's distinctive]
+      - **Weight 1.2** : [Feature name] - [Why it's notable]
+      - **Weight 1.1** : [Feature name] - [Why it's important but standard]
+      
+      **STRATEGY SUMMARY:**
+      [1-2 sentences explaining the overall approach to making this face unique and avoiding generic results]
+      
+      ---
+      
+      ## 🔄 ALTERNATIVE FORMATS
+      
+      ### Format A: Natural Language (No Weights)
+      
+      For models that don't support weighted syntax, use this version:
+      
+      ```
+      [Gender], [age] years old, with VERY DISTINCTIVE [feature 1], 
+      HIGHLY NOTICEABLE [feature 2], and PROMINENT [feature 3].
+      [Skin description with hex], [eye description], [lip description],
+      [hair description], [face shape], [body type].
+      Photorealistic portrait, 8K, natural lighting, accurate colors.
+      
+      CRITICAL: Emphasize the asymmetric/unique features to avoid generic face.
+      ```
+      
+      ### Format B: Keyword List (For APIs)
+      
+      ```
+      DISTINCTIVE: [feature1], [feature2], [feature3]
+      COLORS: skin #XXXXXX, eyes [color], hair [color]
+      STRUCTURE: [face shape], [body type]
+      QUALITY: photorealistic, 8K, natural lighting
+      ```
+      
+      ---
+      
+      ## ✅ QUALITY CHECKLIST
+      
+      Before outputting, verify:
+      - [ ] Positive prompt < 200 words
+      - [ ] 3-5 features with weight ≥ 1.3
+      - [ ] Negative prompt included
+      - [ ] No measurements in mm/degrees
+      - [ ] Distinctive features listed first
+      - [ ] Hex codes used for colors
+      - [ ] Weight explanation provided
+      - [ ] Alternative formats included
+      
+      ---
+      
+      **CRITICAL REMINDERS:**
+      1. **FOCUS ON WHAT MAKES THIS FACE DIFFERENT**, not what makes it similar to others
+      2. **ASYMMETRIES ARE GOLD** - they prevent same face syndrome
+      3. **SPECIFIC > GENERIC** - "hazel eyes with green flecks" beats "pretty eyes"
+      4. **WEIGHTS MATTER** - don't assign 1.5 to everything, be strategic
+      5. **NEGATIVE PROMPTS ARE MANDATORY** - they're 50% of the solution
+
+
 
   ultimate_biome_fashion_icon:
     description: "[1 Image] THE ULTIMATE BIOME. High-Fashion, Lingerie & Couture. Extreme detail on textiles, skin & lighting."
