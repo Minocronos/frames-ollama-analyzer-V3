@@ -252,14 +252,14 @@ with st.sidebar:
             "19. Thigh-High Chaos (Extreme Low)", "20. Shibari Suspension (Inverted)", "21. Lingerie Riot (Intimate)", 
             "22. Booty Shorts (Rear View)", "23. Latex Noir Chrome (Throne)", "24. Sheer Bondage (Overhead)", 
             "25. Leather & Lace (Over-Shoulder)", "26. Wet Look (Poolside)", "27. Dominatrix Edge (Power Stance)", 
-            "28. Underboob Tease (Golden Hour Low)"
+            "28. Underboob Tease (Golden Hour Low)", "29. Liquid Metal Mermaid (Underwater Cell)"
         ]
         
         selected_looks = st.multiselect(
             "Select Looks to Generate",
             options=alt_pov_looks,
-            default=["21. Lingerie Riot (Intimate)"], # Default to avoid accidental 28-look generation
-            help="Choose specific looks. If you uncheck all, it might generate ALL 28 (Warning!)"
+            default=["21. Lingerie Riot (Intimate)"], # Default to avoid accidental 29-look generation
+            help="Choose specific looks. If you uncheck all, it might generate ALL 29 (Warning!)"
         )
         
         # Store selection in session state to use during analysis

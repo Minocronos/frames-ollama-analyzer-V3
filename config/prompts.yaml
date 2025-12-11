@@ -533,6 +533,13 @@ analysis_modes:
           "shape": "oval/square/heart/etc",
           "description": "Comprehensive description of facial structure, cheekbones, and jawline",
           "symmetry_percent": 95,
+          "expression": {
+            "type": "neutral/smiling/serious/surprised/sad/angry/etc",
+            "mouth_state": "closed/slightly open/wide smile/teeth showing",
+            "eye_expression": "neutral gaze/squinting/wide/relaxed",
+            "overall_intensity": "subtle/moderate/strong",
+            "description": "CRITICAL: Prevents AI smile bias. Describe EXACT expression visible in the image."
+          },
           "eyes": { 
             "color": "iris color",
             "shape": "almond/round/hooded",
@@ -595,6 +602,7 @@ analysis_modes:
         },
         "skin": {
           "fitzpatrick": 2,
+          "skin_tone_visual": "fair skin, light beige",
           "base_color": {
             "primary": "warm beige/cool ivory/olive tan/deep bronze/etc",
             "hex_estimate": "#D4A574",
@@ -613,6 +621,33 @@ analysis_modes:
         }
       }
       ```
+      
+      **CRITICAL: FITZPATRICK REFERENCE TABLE**
+      Use this table to ensure ACCURATE skin tone descriptions:
+      
+      | Type | Visual Description | Hex Range | MUST Include Terms |
+      |------|-------------------|-----------|-------------------|
+      | 1 | Very pale, porcelain, ivory | #FFF5E1 - #FFE4C4 | "very pale", "porcelain" |
+      | 2 | Fair, light beige | #F5D5C5 - #F0C9A8 | "fair", "light" |
+      | 3 | Light to medium, beige | #E8C4A8 - #D4A574 | "beige", "medium" |
+      | 4 | Olive, tan, medium brown | #C68642 - #A67C52 | "olive", "tan", "medium brown" |
+      | 5 | Brown, deep brown, rich melanin | #8D5524 - #6B4423 | "brown", "deep brown", "rich melanin" |
+      | 6 | Very dark brown, deep ebony | #4A3728 - #2C1810 | "very dark", "deep ebony", "dark brown" |
+      
+      **MANDATORY RULES:**
+      1. `skin_tone_visual` MUST match the Fitzpatrick type
+      2. If Fitzpatrick ≥ 4, MUST use "brown" or "dark" terms
+      3. If Fitzpatrick ≥ 5, MUST use "deep brown" or "rich melanin"
+      4. Hex estimate MUST be within the range for that type
+      5. In final prompts, USE `skin_tone_visual` + hex, NOT the Fitzpatrick number
+      
+      **⚠️ CRITICAL: NO FRECKLE HALLUCINATION**
+      - Do NOT add "freckles" to descriptions unless they are UNDENIABLY present in the source image
+      - If unsure, DEFAULT TO CLEAR SKIN
+      - If freckles ARE present, specify EXACT location and density (e.g., "sparse freckles on nose bridge")
+      - If NO freckles, write "clear skin, no freckles" or "smooth complexion"
+      - NEVER use generic phrases like "freckles across the face" unless actually there
+      - In `skin.description`, be explicit: "clear skin with no freckles" if absent
       
       ---
       
@@ -801,6 +836,13 @@ analysis_modes:
           "shape": "oval/square/heart/etc",
           "description": "Comprehensive description",
           "symmetry_percent": 95,
+          "expression": {
+            "type": "neutral/smiling/serious/surprised/sad/angry/etc",
+            "mouth_state": "closed/slightly open/wide smile/teeth showing",
+            "eye_expression": "neutral gaze/squinting/wide/relaxed",
+            "overall_intensity": "subtle/moderate/strong",
+            "description": "CRITICAL: Detailed expression analysis. This prevents AI smile bias. Be VERY specific about mouth position and eye state."
+          },
           "eyes": { 
             "color": "NUANCED color (e.g., hazel with green flecks, NOT just 'blue')",
             "shape": "almond/round/hooded",
@@ -830,6 +872,7 @@ analysis_modes:
         },
         "skin": {
           "fitzpatrick": 2,
+          "skin_tone_visual": "fair skin, light beige (MANDATORY: must match Fitzpatrick type)",
           "color_hex": "#D4A574",
           "undertone": "warm/cool/neutral/olive",
           "texture": "fine/medium/coarse",
@@ -840,6 +883,31 @@ analysis_modes:
         }
       }
       ```
+      
+      **CRITICAL: FITZPATRICK SKIN TONE REFERENCE**
+      
+      | Fitzpatrick | Visual Description | Hex Example | Terms to Use |
+      |-------------|-------------------|-------------|--------------|
+      | 1 | Very pale, porcelain, ivory | #FFF5E1 | "very pale", "porcelain", "ivory" |
+      | 2 | Fair, light beige | #F5D5C5 | "fair", "light beige" |
+      | 3 | Light to medium, beige | #E8C4A8 | "beige", "light tan" |
+      | 4 | Olive, tan, medium brown | #C68642 | "olive", "tan", "medium brown" |
+      | 5 | Brown, deep brown, rich melanin | #8D5524 | "brown", "deep brown", "rich melanin" ⚠️ |
+      | 6 | Very dark brown, deep ebony | #4A3728 | "very dark", "deep ebony", "dark brown" ⚠️ |
+      
+      **MANDATORY VALIDATION:**
+      - Fitzpatrick ≥ 4 → MUST use "brown" or "dark" in `skin_tone_visual`
+      - Fitzpatrick ≥ 5 → MUST use "deep brown" or "rich melanin"
+      - `color_hex` MUST be within ±20% of the example hex for that type
+      - In weighted prompts, USE `skin_tone_visual` + hex, NEVER just "Fitzpatrick X"
+      
+      **⚠️ CRITICAL: NO FRECKLE HALLUCINATION**
+      - Do NOT add "freckles" to prompts unless they are UNDENIABLY present in the source image
+      - If unsure, DEFAULT TO CLEAR SKIN
+      - If freckles ARE present, specify EXACT location and density (e.g., "sparse freckles on nose bridge")
+      - If NO freckles, write "clear skin" or "smooth complexion"
+      - NEVER use generic phrases like "freckles across the face" unless actually there
+      - Add to distinctive_marks ONLY if freckles are a defining feature
       
       ---
       
@@ -888,7 +956,8 @@ analysis_modes:
       ```
       ([gender], [age] years old:1.1), ([MOST distinctive feature with specific details]:1.5), 
       ([second most distinctive feature]:1.4), ([third distinctive feature]:1.4),
-      ([skin color] skin, hex #XXXXXX, [undertone] undertones:1.2), 
+      ([expression.type] expression, [mouth_state], [eye_expression]:1.3),
+      ([skin_tone_visual from JSON], hex #XXXXXX, [undertone] undertones:1.2), 
       ([eye color with nuances] [eye shape] eyes:1.3), 
       ([lip description], [cupid's bow detail]:1.3), 
       ([distinctive mark with location]:1.4),
@@ -899,6 +968,11 @@ analysis_modes:
       professional photography, sharp focus, detailed features
       ```
       
+      **⚠️ CRITICAL INSTRUCTIONS:**
+      1. For skin, use `skin_tone_visual` field (e.g., "deep brown skin") NOT "Fitzpatrick type 5"
+      2. For expression, use exact terms from JSON (e.g., "neutral expression, lips closed")
+      3. If expression is neutral/serious, ADD to negative prompt: "smiling, smile, grin"
+      
       **NEGATIVE PROMPT (CRITICAL - DO NOT SKIP):**
       
       ```
@@ -908,7 +982,9 @@ analysis_modes:
       oversaturated colors, artificial lighting, plastic skin, porcelain skin, 
       doll-like, flawless skin, perfect skin, no imperfections,
       stock photo face, AI-generated generic face, boring features,
-      lack of character, no distinctive traits, forgettable face
+      lack of character, no distinctive traits, forgettable face,
+      [IF expression is neutral/serious, ADD: smiling, smile, grin, happy expression, teeth showing, cheerful, beaming],
+      [IF no freckles in source, ADD: freckles, freckled skin, skin spots, beauty marks]
       ```
       
       ---
@@ -1259,9 +1335,9 @@ analysis_modes:
           "shoulder_to_hip_ratio": "1:1.0"
         },
         "skin": {
-          "fitzpatrick": 0,
+          "fitzpatrick": 2,
           "texture": "fine",
-          "description": "MANDATORY: Describe visible pores, skin texture, vellus hair. DO NOT use 'flawless' or 'porcelain'. Focus on REALISM."
+          "description": "MANDATORY: Describe visible pores, skin texture, vellus hair. DO NOT use 'flawless' or 'porcelain'. Focus on REALISM. NOTE: Fitzpatrick scale is 1-6 (1=very pale, 6=very dark)."
         }
       }
       ```
@@ -1474,6 +1550,14 @@ analysis_modes:
       *   **Outfit**: Cropped sports bra lifted just below breasts, denim micro-shorts unbuttoned revealing hip bones. Casual sensuality.
       *   **Materials**: Soft cotton sports bra, distressed denim with frayed edges, smooth skin with visible ab definition.
       *   **Lighting**: Golden hour window light from side creating warm glow on skin, soft natural shadows.
+      *   **Colors**: Warm honey gold, amber sunlight, soft peach skin, denim blue, natural skin tones.
+
+      #### LOOK 29: LIQUID METAL MERMAID + UNDERWATER CELL POV
+      *   **POV**: Subject appears to be trapped inside a transparent water cell, with the camera positioned as if submerged in liquid mercury.
+      *   **Outfit**: Form-fitting liquid metallic bodysuit that appears to merge with the liquid environment, with subtle electrical current patterns glowing beneath the surface.
+      *   **Materials**: Ultra-reflective liquid metal fabric that creates mirror-like distortions, with water droplets and air bubbles frozen mid-motion around the body.
+      *   **Lighting**: Ethereal light rays from above filtering through the liquid medium, creating prismatic refractions and chromatic aberration effects on the skin.
+      *   **Colors**: Iridescent silver and mercury tones with electric blue and violet light rays, contrasted against the warm skin tones.
       > [Full prompt following the 6-part structure]
       
       **LOOK 6: MIRROR MAZE + INFINITE RECURSION POV**
@@ -1543,6 +1627,9 @@ analysis_modes:
       > [Full prompt following the 6-part structure]
 
       **LOOK 28: UNDERBOOB TEASE + GOLDEN HOUR LOW ANGLE POV**
+      > [Full prompt following the 6-part structure]
+
+      **LOOK 29: LIQUID METAL MERMAID + UNDERWATER CELL POV**
       > [Full prompt following the 6-part structure]
 
 
